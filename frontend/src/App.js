@@ -1,4 +1,5 @@
 import './App.css';
+import { store } from "./components/reducer/store"
 
 function App() {
   return (
