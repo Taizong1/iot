@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom"; 
 import "./style.css";
 
-const LoginForm = () => {  
+const Register = () => {  
     const [loading, setLoading] = useState(false);  
     const [form] = Form.useForm();  
     const navigate = useNavigate(); 
@@ -84,4 +84,4 @@ const LoginForm = () => {
     )
 };  
   
-export default LoginForm;  
+export default Register;  

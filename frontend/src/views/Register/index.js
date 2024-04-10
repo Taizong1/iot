@@ -1,3 +1,3 @@
-import Login from "./register.jsx";
+import Register from "./register.jsx";
 
-export default Login;
+export default Register;
