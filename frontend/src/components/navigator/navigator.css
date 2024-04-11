@@ -1,0 +1,247 @@
+.nav-container{
+    position: fixed !important;
+    margin-top: 0;
+    height: 100%;
+    width: 16%;
+    background-color: rgba(255, 255, 255, 0.554);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow:1px 0px 10px 5px #d4d4d489;
+    min-height:750px;
+    min-width:230px
+}
+.nav-portrait{
+    display: inline-block;
+    overflow: hidden;
+    width: 60%;
+    margin-top:5%;
+    margin-bottom: 10px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.nav-portrait img {
+    border-radius:50%;
+    width: 70%;
+    height: calc(width);
+    box-shadow: 0 0 1px 1px #ffffff;
+}
+
+.nav-username{
+    width: 100%;
+    color: #262626;
+    text-align: center;
+    margin-top: 0px;
+    padding-top: 10px;
+    padding-bottom: 15px;
+    font-size: 17px;
+    font-family: Microsoft Yahei,'Times New Roman';
+    line-height: 30px;
+    letter-spacing: 2px;
+
+}
+.exit{
+  font-size: 12px;
+  color: #494949;
+  text-align: center;
+  transition: all.3s;
+}
+
+.exit:hover{
+  color:black;
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.nav-list {
+    width: 100%;
+    list-style: none;
+    margin-top:2%;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.my-link{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size:15px;
+  width: 100%;
+  letter-spacing: 3px;
+  transition: all.2s;
+  color:black;
+}
+
+.my-link:hover{
+  background-color: rgb(50, 134, 208);
+  font-weight:bold;
+  cursor: pointer;
+}
+
+.my-link:hover a{
+  color: white !important;
+}
+
+.my-order{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color:black;
+  text-decoration: none;
+  font-size:15px;
+  width: 100%;
+  text-align: center;
+  letter-spacing: 3px;
+  transition: all.2s;
+}
+.my-order span{
+  margin:0;
+  width:100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all.3s;
+}
+
+.my-order ul{
+  height:0;
+  width:100%;
+  padding: 0;
+  overflow: hidden;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  transition: all.3s;
+}
+
+.my-order ul li{
+  margin:0;
+  padding:0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color:  rgb(173, 215, 252);
+}
+
+.my-order ul li:hover{
+  background-color:  rgb(50, 134, 208);
+}
+.my-order ul li:hover a{
+  color: white !important;
+}
+.my-order:hover>span{
+  background-color: rgb(50, 134, 208);
+  font-weight:bold;
+  cursor: pointer;
+  color:white;
+}
+
+.my-order:hover ul{
+  height:auto;
+  display: flex;
+  font-weight: normal;
+}
+
+.target-li{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(39, 102, 157) !important;
+  font-weight:bold;
+  letter-spacing: 3px;
+}
+
+.target-li a{
+  color:white !important;
+}
+
+.target-li-hidden{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(50, 134, 208) !important;
+  font-weight:bold;
+  letter-spacing: 3px;
+}
+
+.target-li-hidden a{
+  color:white !important
+}
+
+.target-li:hover{
+  background-color: rgb(50, 134, 208);
+}
+
+.identity{
+  font-size: 12px;
+  color: #494949;
+  text-align: center;
+}
+
+.open-order{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color:black;
+  text-decoration: none;
+  font-size:15px;
+  width: 100%;
+  text-align: center;
+  letter-spacing: 3px;
+  transition: all.2s;
+}
+
+.open-order span{
+  margin:0;
+  width:100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all.3s;
+  background-color:rgb(39, 102, 157);
+  color: white;
+  font-weight: bold;
+}
+.open-order:hover{
+  font-weight: normal;
+  background:none;
+}
+.open-order ul{
+  width:100%;
+  padding: 0;
+  overflow: hidden;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  transition: all.3s;
+}
+
+.open-order ul li{
+  margin:0;
+  padding:0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color:  rgba(50, 134, 208,0.4);
+}
+
+
+.open-order ul li:hover{
+  font-weight: normal;
+  background-color:  rgb(50, 134, 208);
+}
+.open-order ul li:hover a{
+  color: white !important;
+}
+
