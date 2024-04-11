@@ -1,0 +1,9 @@
+.demo-logo {  
+    width: 150px; /* Set the total width including the space for the logo and the extra space */  
+    height: 50px; /* Adjust the height as needed */  
+    background-image: url("../assets/images/iot.png"); /* Replace with the actual path to your logo image */  
+    background-size: contain; /* Use 'contain' to ensure the entire image fits within the specified dimensions */  
+    background-position: center; /* Center the background image */  
+    background-repeat: no-repeat; /* Ensure the background image is not repeated */  
+    padding: 0 50px; /* Add padding to create space on the left and right sides */  
+  }  
