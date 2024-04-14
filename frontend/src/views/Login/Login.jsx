@@ -2,23 +2,51 @@ import { Form, Input, Button, message, notification, Layout, Divider } from 'ant
 import { UserOutlined, LockOutlined } from '@ant-design/icons';  
 import { useState, useEffect } from 'react';  
 import { useNavigate } from "react-router-dom"; 
+import { useDispatch } from 'react-redux';
+import { connect } from "react-redux";
+import { userLogin } from "../../components/reducer/action";
 import "./style.css";
+import axios from 'axios';
+
+const server = "http://localhost:8080";
 
 const Login = () => {  
     const [loading, setLoading] = useState(false);  
     const [form] = Form.useForm();  
     const navigate = useNavigate(); 
+    const dispatch = useDispatch();
   
-    const handleSubmit = async () => {  
+    const handleSubmit = async (values) => {  
         try {  
-            const values = await form.validateFields();  
+            // const values = await form.validateFields();  
             let { username, password } = values;  
             let postData = {  
                 name: username,  
                 password: password  
             };  
+            if ( username === "" || password === "" ) {
+                message.error("请填写完整信息");
+                return;
+            }
+            
+            /* 测试代码 */
+            message.success("登陆成功");
+            dispatch(userLogin(username, 0));
+            navigate('/reference');
+            /* 测试代码 */
+
             // 提交
-            console.log('Submit:',postData);  
+            // axios.post(server + "/login", postData).then((response) => {
+            //     if (response.data.state === 0) {
+            //         message.error("用户名不存在或密码错误");
+            //     }
+            //     else {
+            //         message.success("登陆成功");
+            //         dispatch(userLogin(username, 0));
+            //         navigate('/reference');
+            //     }
+            // });
+            // console.log('Submit:',postData);  
         } catch (errorInfo) {  
             console.log('Failed:', errorInfo);  
         }  
@@ -86,4 +114,9 @@ const Login = () => {
     );  
 };  
   
-export default Login;  
+const mapStateToProps = (state) => {
+    return {
+        user: state,
+    };
+};
+export default connect(mapStateToProps)(Login);

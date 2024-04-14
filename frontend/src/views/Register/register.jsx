@@ -2,23 +2,52 @@ import { Form, Input, Button, message, notification, Layout, Divider } from 'ant
 import { UserOutlined, LockOutlined,MailOutlined } from '@ant-design/icons';  
 import { useState, useEffect } from 'react';  
 import { useNavigate } from "react-router-dom"; 
+import { connect } from "react-redux";
 import "./style.css";
+import axios from 'axios';
+
+const server = "http://localhost:8080";
 
 const Register = () => {  
     const [loading, setLoading] = useState(false);  
     const [form] = Form.useForm();  
     const navigate = useNavigate(); 
   
-    const handleSubmit = async () => {  
+    const handleSubmit = async (values) => {  
         try {  
-            const values = await form.validateFields();  
-            let { username, password } = values;  
+            // const values = await form.validateFields();  
+            // console.log(values);
+            
+            let { username, password, email } = values;  
+            if ( username === "" || password === "" || email === "" ) {
+                message.error("请填写完整信息");
+                return;
+            }
+            else if (password.length < 6) {
+                message.error("密码必须至少包含6个字符");
+                return;
+            }
+            else if (email.indexOf('@') === -1) {
+                message.error("请输入有效的邮箱地址");
+                return;
+            }
             let postData = {  
                 name: username,  
-                password: password  
+                password: password, 
+                email: email
             };  
             // 提交
-            console.log('Submit:',postData);  
+            axios.post(server + "/register", postData).then((response) => {
+                if (response.data.state === 0) {
+                    message.error("用户名已存在");
+                }
+                else {
+                    message.success("注册成功");
+                    navigate('/login');
+                }
+            });
+
+            // console.log('Submit:',postData);  
         } catch (errorInfo) {  
             console.log('Failed:', errorInfo);  
         }  
@@ -30,7 +59,10 @@ const Register = () => {
             <div className="login-form">
                 <h3>物联网设备管理系统</h3>
                 <Divider />
-                <Form onSubmit={handleSubmit}>  
+                <Form 
+                    form={form}
+                    onFinish={handleSubmit}
+                >  
                     <Form.Item  
                         name="username"  
                         rules={[  
