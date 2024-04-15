@@ -1,15 +1,15 @@
 import { HomeOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
 
-const menu = [
+const menus = [
   {
     label: '首页',
-    key: 'Index',
+    key: 1,
     icon: <HomeOutlined />,
-    
+    path:"/index",
   },
   {
     label: '设备中心',
-    key: 'Device',
+    key: 2,
     icon: <MailOutlined />,
     children: [
       {
@@ -50,9 +50,9 @@ const menu = [
   },
   {
     label: '用户中心',
-    key: 'User',
+    key: 3,
     icon: <SettingOutlined />,
-    
+    path:"/reference"
   },
 ];
-export default menu;
+export default menus;

@@ -3,8 +3,9 @@ import { Breadcrumb, Layout, Menu, theme ,Avatar } from 'antd';
 import menus from "./menu";
 import "./style.css"
 import {Routes, Route, Navigate,useNavigate, Outlet} from "react-router-dom";
-
+import { UserOutlined } from '@ant-design/icons';
 import routes from "../routes/index.js";
+import { Link } from 'react-router-dom'; 
 const { Header, Content, Footer } = Layout;
 
 
@@ -14,28 +15,31 @@ const DefaultLayout = () => {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
   return (
-    <Layout>
+    <Layout style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <Header
         style={{
           display: 'flex',
           alignItems: 'center',
+          justifyContent: 'space-between',
         }}
       >
         <div className="demo-logo" />
-        <Menu
-          theme="dark"
-          mode="horizontal"
-          defaultSelectedKeys={['2']}
-          items={menus}
-          style={{
-            flex: 1,
-            minWidth: 0,
-          }}
-        />
-        <div style={{ display: 'flex', alignItems: 'center' }}>  
-            <Avatar src="../assets/images/user.png" /> {/* Replace with the actual path to the user's avatar */}  
-            <span style={{ marginLeft: '10px' }}>Username</span> {/* Replace "Username" with the actual username */}  
-        </div> 
+        <Menu  
+          theme="dark"  
+          mode="horizontal"  
+          defaultSelectedKeys={['home']}  
+          style={{ minWidth: 0 }}  
+        >  
+          {menus.map(item => (  
+            <Menu.Item key={item.key}>  
+              <Link to={item.path}>{item.label}</Link>  
+            </Menu.Item>  
+          ))}  
+        </Menu>  
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>      
+            <span style={{ color: 'white', marginRight: '10px' }}>Username</span> 
+            <Avatar size={60} icon={<UserOutlined />} />
+        </div>  
       </Header>
       <Content
         style={{
@@ -60,7 +64,7 @@ const DefaultLayout = () => {
           textAlign: 'center',
         }}
       >
-        Ant Design ©{new Date().getFullYear()} Created by Ant UED
+        IOT ©{new Date().getFullYear()}  by 大规模信息系统开发试验课程
       </Footer>
     </Layout>
   );
