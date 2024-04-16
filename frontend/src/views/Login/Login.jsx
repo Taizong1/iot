@@ -20,9 +20,11 @@ const Login = () => {
         try {  
             // const values = await form.validateFields();  
             let { username, password } = values;  
+            // md5加密
+            password = require('md5')(password);
             let postData = {  
-                name: username,  
-                password: password  
+                user_name: username,  
+                md5: password  
             };  
             if ( username === "" || password === "" ) {
                 message.error("请填写完整信息");
@@ -36,17 +38,17 @@ const Login = () => {
             /* 测试代码 */
 
             // 提交
-            // axios.post(server + "/login", postData).then((response) => {
-            //     if (response.data.state === 0) {
-            //         message.error("用户名不存在或密码错误");
-            //     }
-            //     else {
-            //         message.success("登陆成功");
-            //         dispatch(userLogin(username, 0));
-            //         navigate('/reference');
-            //     }
-            // });
-            // console.log('Submit:',postData);  
+            axios.post(server + "/api/account_api/login", postData).then((response) => {
+                if (response.data.signal === "fail") {
+                    message.error("用户名不存在或密码错误");
+                }
+                else {
+                    message.success("登陆成功");
+                    dispatch(userLogin(username, 0));
+                    navigate('/reference');
+                }
+            });
+            console.log('Submit:',postData);  
         } catch (errorInfo) {  
             console.log('Failed:', errorInfo);  
         }  

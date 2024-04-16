@@ -12,9 +12,13 @@ import {
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import React, { useEffect, useState } from 'react';
 import { Button, Modal } from "react-bootstrap";
+import axios from 'axios';
 
 import Footer from '../Footer';
 import user_avator from "../../assets/images/default.png"
+
+const server = "http://localhost:8080";
+
 function UpdateUserInformation() {
     const new_token = localStorage.getItem('Token');
     useEffect(
@@ -31,32 +35,6 @@ function UpdateUserInformation() {
     const [cardId, setCardId] = useState('');
     const userId = localStorage.getItem('userId');
 
-    const [fee] = useState('10');
-    const [paymentPassword, setPaymentPassword] = useState('');
-
-
-    const handlePaymentPassword = (event) => {
-        setPaymentPassword(event.target.value);
-    }
-    const handleTopup = () => {
-        const data = {
-            fee: fee,
-            paymentPassword: paymentPassword
-        }
-        console.log(fee);
-        const Token = localStorage.getItem('Token');
-        console.log(Token);
-        var myHeaders = new Headers();
-        myHeaders.append("Authorization", `Bearer ${Token}`);
-        myHeaders.append("Content-Type", "application/json");
-
-        var requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: JSON.stringify(data),
-            redirect: 'follow'
-        };
-    }
 
     const handleEmailAddressChange = (event) => {
         setEmailAddress(event.target.value);
@@ -97,20 +75,18 @@ function UpdateUserInformation() {
     const handlePasswordChange = () => {
         const data = {
             newPassword: newPassword,
-            oldPassword: oldPassword
+            oldPassword: oldPassword,
+            userId: userId
         }
-        const Token = localStorage.getItem('Token');
-        console.log(Token);
-        var myHeaders = new Headers();
-        myHeaders.append("Authorization", `Bearer ${Token}`);
-        myHeaders.append("Content-Type", "application/json");
-
-        var requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: JSON.stringify(data),
-            redirect: 'follow'
-        };
+        
+        axios.post(server + "/updatePassword", data).then((response) => {
+            if (response.data.state === 0) {
+                alert("更新失败");
+            }
+            else {
+                alert("更新成功");
+            }
+        });
 
     };
     
@@ -120,18 +96,16 @@ function UpdateUserInformation() {
             phoneNo: phoneNo,
             userId: userId
         }
-        const Token = localStorage.getItem('Token');
-        console.log(Token);
-        var myHeaders = new Headers();
-        myHeaders.append("Authorization", `Bearer ${Token}`);
-        myHeaders.append("Content-Type", "application/json");
+        
+        axios.post(server + "/update", data).then((response) => {
+            if (response.data.state === 0) {
+                alert("更新失败");
+            }
+            else {
+                alert("更新成功");
+            }
+        });
 
-        var requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: JSON.stringify(data),
-            redirect: 'follow'
-        };
     };
     const handleAvatarChange = () => {
         let formData = new FormData();
@@ -186,7 +160,7 @@ function UpdateUserInformation() {
                                            </MDBCol>
 
                                            <MDBCol col='6'>
-                                               <MDBInput wrapperClass='mb-4' label='性别' id='form2' type='email' value={emailAddress} onChange={handleEmailAddressChange}/>
+                                               <MDBInput wrapperClass='mb-4' label='邮箱' id='form2' type='email' value={emailAddress} onChange={handleEmailAddressChange}/>
                                            </MDBCol>
                                        </MDBRow>
                                        <MDBRow>

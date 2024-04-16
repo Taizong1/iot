@@ -32,14 +32,16 @@ const Register = () => {
                 return;
             }
             let postData = {  
-                name: username,  
+                user_name: username,  
                 password: password, 
-                email: email
+                email: email,
+                phone: "00000000000",
+                md5: require('md5')(password)
             };  
             // 提交
-            axios.post(server + "/register", postData).then((response) => {
-                if (response.data.state === 0) {
-                    message.error("用户名已存在");
+            axios.post(server + "/api/account_api/register", postData).then((response) => {
+                if (response.data.signal === "fail") {
+                    message.error("New account creation failed!");
                 }
                 else {
                     message.success("注册成功");
