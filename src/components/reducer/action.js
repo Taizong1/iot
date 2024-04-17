@@ -17,7 +17,7 @@ export const userUnLogin = () => ({
   type: USER_UNLOGIN
 });
 
-export const updateUserInfo = () => ({
+export const updateUserInfo = (emailAddress, phoneNo) => ({
   type: UPDATE_USER_INFO,
   payload: {
     emailAddress,

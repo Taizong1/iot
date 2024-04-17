@@ -1,4 +1,4 @@
-import { USER_LOGIN, USER_UNLOGIN } from './action';
+import { USER_LOGIN, USER_UNLOGIN, UPDATE_USER_INFO } from './action';
 
 // 定义初始状态
 /*
