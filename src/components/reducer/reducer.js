@@ -12,7 +12,7 @@ const initialState = {
     isLogin: false,
     userId: 0,
     userName: "",
-    emailAdress: "",
+    emailAddress: "",
     phoneNo: "",
 };
 
