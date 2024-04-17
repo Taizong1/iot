@@ -7,18 +7,21 @@
 ```
 /api/login
 输入：
-postData = {  
-    user_name: username,  
-    md5: password  
-};  
-接收：
-{
-    'message':,
-    'signal': "success"
+data = {  
+    userName: username,  
+    password: password 
 }
+
+返回：
+- 成功
 {
-    'message':,
-    'signal': "fail"
+    state: 1
+    message: message
+}
+- 失败
+{
+    state: 0
+    message: reason
 }
 ```
 
@@ -27,13 +30,24 @@ postData = {
 ```
 /api/register
 输入：
-postData = {  
-    user_name: username,  
-    email: email,
-    phone: "00000000000",
-    md5: require('md5')(password)
-};  
-接收：同登录
+data = {  
+    userName: username,  
+    password: password, 
+    emailAddress: email,
+    phoneNo: phone,
+}
+
+返回：
+- 成功
+{
+    state: 1
+    message: message
+}
+- 失败
+{
+    state: 0
+    message: reason
+}
 ```
 
 ### 修改密码
@@ -44,16 +58,19 @@ postData = {
 data = {
     newPassword: newPassword,
     oldPassword: oldPassword,
-    userName: userName
+    userName: username
 }
+
 返回：
-更新失败：
-{
-	state: 0 
-}
-更新成功：
+- 成功
 {
 	state: 1
+	message: message
+}
+- 失败
+{
+	state: 0
+	message: reason
 }
 ```
 
@@ -63,10 +80,25 @@ data = {
 /api/updateInfor
 输入：
 data = {
-    emailAddress: emailAddress,
-    phoneNo: phoneNo,
-    userName: userName
+    emailAddress: email,
+    phoneNo: phone,
+    userName: username
 }
-返回同上
+
+返回：
+- 成功
+{
+	state: 1
+	message: message
+}
+- 失败
+{
+	state: 0
+	message: reason
+}
 ```
+
+
+
+> 注意，`:`左侧为前端传入关键字
 
