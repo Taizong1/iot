@@ -10,6 +10,7 @@
     "antd": "^5.16.0",
     "axios": "^1.6.8",
     "echarts-for-react": "^3.0.2",
+    "md5": "^2.3.0",
     "mdb-react-ui-kit": "^7.2.0",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",

@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import "./style.css";
 import axios from 'axios';
 
-const server = "http://localhost:8080";
+const server = "http://10.192.72.230:8080";
 
 const Register = () => {  
     const [loading, setLoading] = useState(false);  
@@ -32,15 +32,15 @@ const Register = () => {
                 return;
             }
             let postData = {  
-                user_name: username,  
-                email: email,
-                phone: phone,
-                md5: require('md5')(password)
+                userName: username,  
+                emailAddress: email,
+                phoneNo: phone,
+                password: require('md5')(password)
             };  
             // 提交
             axios.post(server + "/api/register", postData).then((response) => {
-                if (response.data.signal === "fail") {
-                    message.error("New account creation failed!");
+                if (response.data.state === 0) {
+                    message.error(response.data.message);
                 }
                 else {
                     message.success("注册成功");

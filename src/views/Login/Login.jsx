@@ -8,7 +8,7 @@ import { userLogin } from "../../components/reducer/action";
 import "./style.css";
 import axios from 'axios';
 
-const server = "http://localhost:8080";
+const server = "http://10.192.72.230:8080";
 
 const Login = () => {  
     const [loading, setLoading] = useState(false);  
@@ -23,8 +23,8 @@ const Login = () => {
             // md5加密
             password = require('md5')(password);
             let postData = {  
-                user_name: username,  
-                md5: password  
+                userName: username,  
+                password: password  
             };  
             if ( username === "" || password === "" ) {
                 message.error("请填写完整信息");
@@ -32,15 +32,15 @@ const Login = () => {
             }
             
             /* 测试代码 */
-            message.success("登陆成功");
-            dispatch(userLogin(username, 0));
-            navigate('/reference');
+            // message.success("登陆成功");
+            // dispatch(userLogin(username, 0));
+            // navigate('/reference');
             /* 测试代码 */
 
             // 提交
             axios.post(server + "/api/login", postData).then((response) => {
-                if (response.data.signal === "fail") {
-                    message.error("用户名不存在或密码错误");
+                if (response.data.state === 0) {
+                    message.error(response.data.message);
                 }
                 else {
                     message.success("登陆成功");

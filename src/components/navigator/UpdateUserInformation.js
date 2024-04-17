@@ -17,7 +17,7 @@ import axios from 'axios';
 import Footer from '../Footer';
 import user_avator from "../../assets/images/default.png"
 
-const server = "http://localhost:8080";
+const server = "http://10.192.72.230:8080";
 
 function UpdateUserInformation() {
     const new_token = localStorage.getItem('Token');
@@ -72,7 +72,7 @@ function UpdateUserInformation() {
         
         axios.post(server + "/updatePassword", data).then((response) => {
             if (response.data.state === 0) {
-                alert("更新失败");
+                alert(response.data.message);
             }
             else {
                 alert("更新成功");
@@ -90,7 +90,7 @@ function UpdateUserInformation() {
         
         axios.post(server + "/api/updateInfor", data).then((response) => {
             if (response.data.state === 0) {
-                alert("更新失败");
+                alert(response.data.message);
             }
             else {
                 alert("更新成功");
