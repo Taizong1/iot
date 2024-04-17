@@ -26,7 +26,7 @@ const IotReducer = (state = initialState, action) => {
             isLogin: true,
             userId: action.payload.userId,
             userName: action.payload.userName,
-            emailAdress: action.payload.emailAdress,
+            emailAdress: action.payload.emailAddress,
             phoneNo: action.payload.phoneNo
         }
     }
@@ -37,7 +37,7 @@ const IotReducer = (state = initialState, action) => {
             isLogin: false,
             userId: 0,
             userName: "",
-            emailAdress: "",
+            emailAddress: "",
             phoneNo: ""
         }
     }
@@ -45,7 +45,7 @@ const IotReducer = (state = initialState, action) => {
         console.log("update user information")
         return {
             ...state,
-            emailAdress: action.payload.emailAdress,
+            emailAdress: action.payload.emailAddress,
             phoneNo: action.payload.phoneNo
         }
     }
