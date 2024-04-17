@@ -31,16 +31,11 @@ function UpdateUserInformation() {
     const [newPassword, setNewPassword] = useState('');
     const [oldPassword, setOldPassword] = useState('');
 
-    const [realName, setRealName] = useState('');
     const userName = localStorage.getItem('userName');
 
 
     const handleEmailAddressChange = (event) => {
         setEmailAddress(event.target.value);
-    };
-
-    const handleRealNameChange = (event) => {
-        setRealName(event.target.value);
     };
 
     const handlePhoneNoChange = (event) => {
@@ -148,7 +143,7 @@ function UpdateUserInformation() {
                                                <MDBFile label='点击上传文件（.png/.jpg/.jpeg）' id='customFile' onChange={handleAvatarChange}/>
                                            </MDBCol>
                                        </MDBRow>
-                                       <MDBInput wrapperClass='mb-4' label='用户名' id='form3' type='text' value={realName} onChange={handleRealNameChange} disabled />
+                                       <MDBInput wrapperClass='mb-4' label='用户名' id='form3' type='text' value={userName} disabled />
                                        <MDBRow>
                                            <MDBCol col='6'>
                                                <MDBInput wrapperClass='mb-4' label='手机号' id='form1' type='text' value={phoneNo} onChange={handlePhoneNoChange}/>
