@@ -38,7 +38,7 @@ const Login = () => {
             /* 测试代码 */
 
             // 提交
-            axios.post(server + "/api/account_api/login", postData).then((response) => {
+            axios.post(server + "/api/login", postData).then((response) => {
                 if (response.data.signal === "fail") {
                     message.error("用户名不存在或密码错误");
                 }

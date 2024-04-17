@@ -39,7 +39,7 @@ const Register = () => {
                 md5: require('md5')(password)
             };  
             // 提交
-            axios.post(server + "/api/account_api/register", postData).then((response) => {
+            axios.post(server + "/api/register", postData).then((response) => {
                 if (response.data.signal === "fail") {
                     message.error("New account creation failed!");
                 }
