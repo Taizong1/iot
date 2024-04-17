@@ -1,9 +1,9 @@
 import React from 'react';
-import { Breadcrumb, Layout, Menu, theme ,Avatar } from 'antd';
+import { Breadcrumb, Layout, Menu, theme ,Avatar , message} from 'antd';
 import menus from "./menu";
 import "./style.css"
 import {Routes, Route, Navigate,useNavigate, Outlet} from "react-router-dom";
-import { UserOutlined } from '@ant-design/icons';
+import { UserOutlined,LogoutOutlined } from '@ant-design/icons';
 import routes from "../routes/index.js";
 import { Link } from 'react-router-dom'; 
 const { Header, Content, Footer } = Layout;
@@ -11,6 +11,14 @@ const { Header, Content, Footer } = Layout;
 
 
 const DefaultLayout = () => {
+  
+  const navigate = useNavigate(); 
+  
+  const loginOut = () => {
+    localStorage.clear();
+    navigate("/login");
+    message.success("登出成功!");
+  };
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -35,6 +43,12 @@ const DefaultLayout = () => {
               <Link to={item.path}>{item.label}</Link>  
             </Menu.Item>  
           ))}  
+          <Menu.Divider />  
+          <Menu.Item>  
+            <span onClick={loginOut}>  
+              <LogoutOutlined /> 退出登录 {/* 使用新的 LogoutOutlined 图标 */}  
+            </span>  
+          </Menu.Item>  
         </Menu>  
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>      
             <span style={{ color: 'white', marginRight: '10px' }}>Username</span> 
