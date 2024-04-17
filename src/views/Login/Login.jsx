@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom"; 
 import { useDispatch } from 'react-redux';
 import { connect } from "react-redux";
-import { userLogin } from "../../components/reducer/action";
+import { userLogin, updateUserInfo } from "../../components/reducer/action";
 import "./style.css";
 import axios from 'axios';
 
@@ -45,9 +45,14 @@ const Login = () => {
                 else {
                     message.success("登陆成功");
                     dispatch(userLogin(username, 0));
-                    navigate('/reference');
+                    return axios.post(server + "/api/showInfo",postData)
                 }
-            });
+            })
+            .then((response)=>{
+                console.log(response.data)
+                dispatch(updateUserInfo(response.data.user.email, response.data.user.phone))
+                navigate('/reference');
+            })
             console.log('Submit:',postData);  
         } catch (errorInfo) {  
             console.log('Failed:', errorInfo);  

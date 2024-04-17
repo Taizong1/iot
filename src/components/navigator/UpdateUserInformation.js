@@ -12,23 +12,25 @@ import {
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import React, { useEffect, useState } from 'react';
 import { Button, Modal } from "react-bootstrap";
+import { message } from 'antd';  
 import axios from 'axios';
 
 import Footer from '../Footer';
 import user_avator from "../../assets/images/default.png"
 import { useDispatch } from 'react-redux';
+import { updateUserInfo } from '../reducer/action';
 import { store } from '../reducer/store';
 
 const server = "http://10.192.72.230:8080";
 
 function UpdateUserInformation() {
-    const [emailAddress, setEmailAddress] = useState('');
-    const [phoneNo, setPhoneNo] = useState('');
+    const [emailAddress, setEmailAddress] = useState(store.getState().emailAddress);
+    const [phoneNo, setPhoneNo] = useState(store.getState().phoneNo);
     const [newPassword, setNewPassword] = useState('');
     const [oldPassword, setOldPassword] = useState('');
+    const dispatch = useDispatch();
 
     const userName = store.getState().userName;
-
     const handleEmailAddressChange = (event) => {
         setEmailAddress(event.target.value);
     };
@@ -45,17 +47,19 @@ function UpdateUserInformation() {
 
     const handlePasswordChange = () => {
         const data = {
-            newPassword: newPassword,
-            oldPassword: oldPassword,
+            newPassword: require('md5')(newPassword),
+            oldPassword: require('md5')(oldPassword),
             userName: userName
         }
         
-        axios.post(server + "/updatePassword", data).then((response) => {
+        axios.post(server + "/api/updatePassword", data).then((response) => {
             if (response.data.state === 0) {
-                alert(response.data.message);
+                message.error(response.data.message);
             }
             else {
-                alert("更新成功");
+                message.success("更新成功");
+                setNewPassword('');
+                setOldPassword('');
             }
         });
 
@@ -68,12 +72,13 @@ function UpdateUserInformation() {
             userName: userName,
         }
         
-        axios.post(server + "/api/updateInfor", data).then((response) => {
+        axios.post(server + "/api/updateInfo", data).then((response) => {
             if (response.data.state === 0) {
-                alert(response.data.message);
+                message.error(response.data.message);
             }
             else {
-                alert("更新成功");
+                dispatch(updateUserInfo(emailAddress, phoneNo))
+                message.success("更新成功");
             }
         });
 
@@ -133,12 +138,11 @@ function UpdateUserInformation() {
                                            </MDBCol>
                                        </MDBRow>
                                        <MDBRow>
+                                            <MDBCol col='6'>
+                                                <MDBInput wrapperClass='mb-4' label='旧登入密码' id='form4' type='password' value={oldPassword} onChange={handleOldPasswordChange}/>
+                                            </MDBCol>
                                            <MDBCol col='6'>
                                                <MDBInput wrapperClass='mb-4' label='新登入密码' id='form3' type='password' value={newPassword} onChange={handleNewPasswordChange}/>
-                                           </MDBCol>
-
-                                           <MDBCol col='6'>
-                                               <MDBInput wrapperClass='mb-4' label='旧登入密码' id='form4' type='password' value={oldPassword} onChange={handleOldPasswordChange}/>
                                            </MDBCol>
                                            <MDBCol col='6'>
                                                <MDBBtn className='w-80 mb-4' size='md' onClick={handlePasswordChange}>修改登入密码</MDBBtn>
