@@ -16,23 +16,18 @@ import axios from 'axios';
 
 import Footer from '../Footer';
 import user_avator from "../../assets/images/default.png"
+import { useDispatch } from 'react-redux';
+import { store } from '../reducer/store';
 
 const server = "http://10.192.72.230:8080";
 
 function UpdateUserInformation() {
-    const new_token = localStorage.getItem('Token');
-    useEffect(
-        () => {
-            GetUserInfo();
-        }, []
-    );
     const [emailAddress, setEmailAddress] = useState('');
     const [phoneNo, setPhoneNo] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [oldPassword, setOldPassword] = useState('');
 
-    const userName = localStorage.getItem('userName');
-
+    const userName = store.getState().userName;
 
     const handleEmailAddressChange = (event) => {
         setEmailAddress(event.target.value);
@@ -47,21 +42,6 @@ function UpdateUserInformation() {
     const handleOldPasswordChange = (event) => {
         setOldPassword(event.target.value);
     };
-
-
-    const GetUserInfo = () => {
-        const Token = localStorage.getItem('Token');
-        console.log(Token);
-        var myHeaders = new Headers();
-        myHeaders.append("Authorization", `Bearer ${Token}`);
-        myHeaders.append("Content-Type", "application/json");
-
-        var requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            redirect: 'follow'
-        };
-    }
 
     const handlePasswordChange = () => {
         const data = {
@@ -122,7 +102,6 @@ function UpdateUserInformation() {
 
     return (
        <div>
-           {new_token != '' ? (
                <div>
                        <MDBRow className='text-center'>
                            <MDBCol md='3'></MDBCol>
@@ -182,14 +161,6 @@ function UpdateUserInformation() {
                            <MDBCol md='3'></MDBCol>
                        </MDBRow>
                </div>
-           ):(
-               <div>
-                   <MDBContainer className="my-5 text-center">
-                       <h1>Page not found.</h1>
-                   </MDBContainer>
-                   <Footer />
-               </div>
-           )}
        </div>
     );
 }
