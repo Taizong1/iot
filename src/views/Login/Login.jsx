@@ -8,7 +8,7 @@ import { userLogin, updateUserInfo } from "../../components/reducer/action";
 import "./style.css";
 import axios from 'axios';
 
-const server = "http://10.192.72.230:8080";
+const server = "http://10.214.241.121:8080";
 
 const Login = () => {  
     const [loading, setLoading] = useState(false);  
@@ -49,11 +49,11 @@ const Login = () => {
                 }
             })
             .then((response)=>{
-                console.log(response.data)
-                dispatch(updateUserInfo(response.data.user.email, response.data.user.phone))
-                navigate('/reference');
+                if (response) {
+                    dispatch(updateUserInfo(response.data.user.email, response.data.user.phone))
+                    navigate('/reference');
+                }
             })
-            console.log('Submit:',postData);  
         } catch (errorInfo) {  
             console.log('Failed:', errorInfo);  
         }  

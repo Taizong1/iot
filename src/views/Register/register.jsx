@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import "./style.css";
 import axios from 'axios';
 
-const server = "http://10.192.72.230:8080";
+const server = "http://10.214.241.121:8080";
 
 const Register = () => {  
     const [loading, setLoading] = useState(false);  
@@ -50,7 +50,7 @@ const Register = () => {
 
             // console.log('Submit:',postData);  
         } catch (errorInfo) {  
-            console.log('Failed:', errorInfo);  
+            // console.log('Failed:', errorInfo);  
         }  
     };  
   

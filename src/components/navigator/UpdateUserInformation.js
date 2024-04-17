@@ -21,7 +21,7 @@ import { useDispatch } from 'react-redux';
 import { updateUserInfo } from '../reducer/action';
 import { store } from '../reducer/store';
 
-const server = "http://10.192.72.230:8080";
+const server = "http://10.214.241.121:8080";
 
 function UpdateUserInformation() {
     const [emailAddress, setEmailAddress] = useState(store.getState().emailAddress);
@@ -87,7 +87,7 @@ function UpdateUserInformation() {
         let formData = new FormData();
         const fileInput = document.getElementById('customFile');
         const file = fileInput.files[0];
-        console.log(file);
+        // console.log(file);
         formData.append('file', file);
         const Token = localStorage.getItem('Token');
         var myHeaders = new Headers();

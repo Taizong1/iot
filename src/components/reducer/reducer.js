@@ -20,7 +20,7 @@ const initialState = {
 const IotReducer = (state = initialState, action) => {
   switch (action.type) {
     case USER_LOGIN: {
-        console.log(action.payload.userName + " login")
+        // console.log(action.payload.userName + " login")
         return {
             ...state,
             isLogin: true,
@@ -31,7 +31,7 @@ const IotReducer = (state = initialState, action) => {
         }
     }
     case USER_UNLOGIN: {
-        console.log("unlogin")
+        // console.log("unlogin")
         return {
             ...state,
             isLogin: false,
@@ -42,7 +42,7 @@ const IotReducer = (state = initialState, action) => {
         }
     }
     case UPDATE_USER_INFO: {
-        console.log("update user information")
+        // console.log("update user information")
         return {
             ...state,
             emailAddress: action.payload.emailAddress,
