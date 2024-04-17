@@ -33,7 +33,6 @@ const Register = () => {
             }
             let postData = {  
                 user_name: username,  
-                password: password, 
                 email: email,
                 phone: phone,
                 md5: require('md5')(password)

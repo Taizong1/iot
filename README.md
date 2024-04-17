@@ -29,7 +29,6 @@ postData = {
 输入：
 postData = {  
     user_name: username,  
-    password: password, 
     email: email,
     phone: "00000000000",
     md5: require('md5')(password)
