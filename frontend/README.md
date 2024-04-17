@@ -66,8 +66,7 @@ data = {
 data = {
     emailAddress: emailAddress,
     phoneNo: phoneNo,
-    userName: userName,
-    newName: newName
+    userName: userName
 }
 返回同上
 ```

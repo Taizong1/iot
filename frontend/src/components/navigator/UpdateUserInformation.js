@@ -32,7 +32,6 @@ function UpdateUserInformation() {
     const [oldPassword, setOldPassword] = useState('');
 
     const [realName, setRealName] = useState('');
-    const [cardId, setCardId] = useState('');
     const userName = localStorage.getItem('userName');
 
 
@@ -40,9 +39,6 @@ function UpdateUserInformation() {
         setEmailAddress(event.target.value);
     };
 
-    const handleCardIdChange = (event) => {
-        setCardId(event.target.value);
-    };
     const handleRealNameChange = (event) => {
         setRealName(event.target.value);
     };
@@ -94,10 +90,10 @@ function UpdateUserInformation() {
         const data = {
             emailAddress: emailAddress,
             phoneNo: phoneNo,
-            userName: userName
+            userName: userName,
         }
         
-        axios.post(server + "/update", data).then((response) => {
+        axios.post(server + "/api/updateInfor", data).then((response) => {
             if (response.data.state === 0) {
                 alert("更新失败");
             }
