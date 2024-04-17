@@ -1,5 +1,5 @@
 import { Form, Input, Button, message, notification, Layout, Divider } from 'antd';  
-import { UserOutlined, LockOutlined,MailOutlined } from '@ant-design/icons';  
+import { UserOutlined, LockOutlined,MailOutlined, PhoneOutlined } from '@ant-design/icons';  
 import { useState, useEffect } from 'react';  
 import { useNavigate } from "react-router-dom"; 
 import { connect } from "react-redux";
@@ -18,7 +18,7 @@ const Register = () => {
             // const values = await form.validateFields();  
             // console.log(values);
             
-            let { username, password, email } = values;  
+            let { username, password, email,phone } = values;  
             if ( username === "" || password === "" || email === "" ) {
                 message.error("请填写完整信息");
                 return;
@@ -35,7 +35,7 @@ const Register = () => {
                 user_name: username,  
                 password: password, 
                 email: email,
-                phone: "00000000000",
+                phone: phone,
                 md5: require('md5')(password)
             };  
             // 提交
@@ -92,6 +92,15 @@ const Register = () => {
                     >  
                         <Input prefix={<MailOutlined />} placeholder="邮箱" />  
                     </Form.Item>  
+                    <Form.Item  
+                        name="phone"  
+                        rules={[  
+                        { required: true, message: "请输入手机号" },  
+                        { type: 'phone', message: '请输入有效的手机号' }  
+                        ]}  
+                    >  
+                        <Input prefix={<PhoneOutlined />} placeholder="手机号" />  
+                    </Form.Item> 
                     <Form.Item>  
                         <Button  
                         type="primary"  

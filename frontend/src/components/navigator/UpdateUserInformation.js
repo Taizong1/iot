@@ -153,10 +153,9 @@ function UpdateUserInformation() {
                                            </MDBCol>
                                        </MDBRow>
                                        <MDBInput wrapperClass='mb-4' label='用户名' id='form3' type='text' value={realName} onChange={handleRealNameChange} disabled />
-                                       <MDBInput wrapperClass='mb-4' label='身份证号' id='form4' type='text' value={cardId} onChange={handleCardIdChange} disabled />
                                        <MDBRow>
                                            <MDBCol col='6'>
-                                               <MDBInput wrapperClass='mb-4' label='用户名' id='form1' type='text' value={phoneNo} onChange={handlePhoneNoChange}/>
+                                               <MDBInput wrapperClass='mb-4' label='手机号' id='form1' type='text' value={phoneNo} onChange={handlePhoneNoChange}/>
                                            </MDBCol>
 
                                            <MDBCol col='6'>
@@ -165,11 +164,11 @@ function UpdateUserInformation() {
                                        </MDBRow>
                                        <MDBRow>
                                            <MDBCol col='6'>
-                                               <MDBInput wrapperClass='mb-4' label='手机号' id='form1' type='text' value={phoneNo} onChange={handlePhoneNoChange}/>
+                                               <MDBInput wrapperClass='mb-4' label='新登入密码' id='form3' type='password' value={newPassword} onChange={handleNewPasswordChange}/>
                                            </MDBCol>
 
                                            <MDBCol col='6'>
-                                               <MDBInput wrapperClass='mb-4' label='旧登入密码' id='form6' type='password' value={oldPassword} onChange={handleOldPasswordChange}/>
+                                               <MDBInput wrapperClass='mb-4' label='旧登入密码' id='form4' type='password' value={oldPassword} onChange={handleOldPasswordChange}/>
                                            </MDBCol>
                                            <MDBCol col='6'>
                                                <MDBBtn className='w-80 mb-4' size='md' onClick={handlePasswordChange}>修改登入密码</MDBBtn>
