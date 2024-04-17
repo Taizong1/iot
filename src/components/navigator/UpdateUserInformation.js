@@ -12,6 +12,7 @@ import {
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import React, { useEffect, useState } from 'react';
 import { Button, Modal } from "react-bootstrap";
+import { useNavigate } from 'react-router';
 import { message } from 'antd';  
 import axios from 'axios';
 
@@ -29,6 +30,13 @@ function UpdateUserInformation() {
     const [newPassword, setNewPassword] = useState('');
     const [oldPassword, setOldPassword] = useState('');
     const dispatch = useDispatch();
+    const navigate = useNavigate(); 
+
+    useEffect(()=>{
+        if(store.getState().isLogin === false){
+            navigate('/login')
+        }
+    })
 
     const userName = store.getState().userName;
     const handleEmailAddressChange = (event) => {
