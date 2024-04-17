@@ -33,7 +33,7 @@ function UpdateUserInformation() {
 
     const [realName, setRealName] = useState('');
     const [cardId, setCardId] = useState('');
-    const userId = localStorage.getItem('userId');
+    const userName = localStorage.getItem('userName');
 
 
     const handleEmailAddressChange = (event) => {
@@ -76,7 +76,7 @@ function UpdateUserInformation() {
         const data = {
             newPassword: newPassword,
             oldPassword: oldPassword,
-            userId: userId
+            userName: userName
         }
         
         axios.post(server + "/updatePassword", data).then((response) => {
@@ -94,7 +94,7 @@ function UpdateUserInformation() {
         const data = {
             emailAddress: emailAddress,
             phoneNo: phoneNo,
-            userId: userId
+            userName: userName
         }
         
         axios.post(server + "/update", data).then((response) => {
