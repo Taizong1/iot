@@ -3,7 +3,7 @@ import {Routes, Route, Navigate,useNavigate, Outlet} from "react-router-dom";
 import { Layout, BackTop, message } from "antd";
 import routes from "../routes/index.js";
 
-import menus from "./menu";
+import menus from "./menu.js";
 
 import "../style/layout.css"
 import AppHeader from "./AppHeader.jsx";
@@ -26,14 +26,8 @@ const reducer = (state, action) => {
 };
 
 const getMenu = menu => {
-  let newMenu,
-    auth = JSON.parse(localStorage.getItem("user")).auth;
-  if (!auth) {
-    return menu;
-  } else {
-    newMenu = menu.filter(res => res.auth && res.auth.indexOf(auth) !== -1);
-    return newMenu;
-  }
+
+  return menus;
 };
 
 const DefaultLayout = (props) => {
@@ -88,7 +82,7 @@ const DefaultLayout = (props) => {
           menuToggle={state.menuToggle}
           menuClick={menuClick}
           loginOut={loginOut}
-          username={JSON.parse(localStorage.getItem("user")).name}
+          username={"Username"}
         />
         <Content className="content">  
           <Routes>  
