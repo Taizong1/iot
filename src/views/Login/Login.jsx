@@ -38,22 +38,25 @@ const Login = () => {
             /* 测试代码 */
 
             // 提交
-            axios.post(server + "/api/login", postData).then((response) => {
-                if (response.data.state === 0) {
-                    message.error(response.data.message);
-                }
-                else {
-                    message.success("登陆成功");
-                    dispatch(userLogin(username, 0));
-                    return axios.post(server + "/api/showInfo",postData)
-                }
-            })
-            .then((response)=>{
-                if (response) {
-                    dispatch(updateUserInfo(response.data.user.email, response.data.user.phone))
-                    navigate('/reference');
-                }
-            })
+            // axios.post(server + "/api/login", postData).then((response) => {
+            //     if (response.data.state === 0) {
+            //         message.error(response.data.message);
+            //     }
+            //     else {
+            //         message.success("登陆成功");
+            //         dispatch(userLogin(username, 0));
+            //         return axios.post(server + "/api/showInfo",postData)
+            //     }
+            // })
+            // .then((response)=>{
+            //     if (response) {
+            //         dispatch(updateUserInfo(response.data.user.email, response.data.user.phone))
+            //         navigate('/reference');
+            //     }
+            // })
+            message.success("登陆成功");
+            dispatch(userLogin("test", 0));
+            navigate('/reference');
         } catch (errorInfo) {  
             console.log('Failed:', errorInfo);  
         }  

@@ -24,7 +24,7 @@ const {Panel} = Collapse;
 const {Option} = Select;
 const {TextArea} = Input;
 
-const DeviceInfo : React.FC = () => {
+const DeviceInfo = () => {
      
     // 抽屉
     const [open, setOpen] = useState(false);
@@ -77,6 +77,7 @@ const DeviceInfo : React.FC = () => {
     // 选择的设备
     let [showRecord, setShowRecord] = useState([]);
 
+    //TODO: 设备删除逻辑
     const handleDelete = deleteid => {
         const confirmed = window.confirm("确定要删除吗？");
         if (confirmed) {
@@ -152,10 +153,11 @@ const DeviceInfo : React.FC = () => {
             fetchData();
         },
         // eslint-disable-next-line
-        []
+        
     );
 
     // 获取数据
+    //TODO: 界面初始化
     const fetchData = async () => {
         // 开始加载
         setLoad(true);
@@ -177,15 +179,18 @@ const DeviceInfo : React.FC = () => {
     };
 
     // 点击搜索按钮触发的方法
+    //TODO: 查询指定设备
     const searchData = e => {
 
     };
 
+    //TODO: 设备修改逻辑
     const submitEdit = e => {
         e.preventDefault();
 
     };
 
+    //TODO: 设备修改逻辑
     const submitCreate = e => {
         
         e.preventDefault();
