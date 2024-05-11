@@ -117,6 +117,7 @@ const DeviceData = props => {
     );
 
     // 获取数据
+    //TODO: 界面初始化加载
     const fetchData = async () => {
         // 开始加载
         setLoad(true);
