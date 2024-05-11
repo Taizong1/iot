@@ -12,19 +12,24 @@ import {
     Input,
     Space,
     DatePicker,
-    Drawer
+    Drawer,
+    Descriptions
 } from "antd";
 import "./style.css"
 import {withRouter} from "react-router-dom";
+import axios from "axios";
 
 import {UserOutlined, FormOutlined,PlusOutlined} from "@ant-design/icons";
 import DeviceData from "./DeviceData";
+
+
+const server = "http://10.214.241.121:8080";
 
 const {Panel} = Collapse;
 const {Option} = Select;
 const {TextArea} = Input;
 
-const DeviceInfo = () => {
+const DeviceInfo = props => {
      
     // 抽屉
     const [open, setOpen] = useState(false);
@@ -53,20 +58,22 @@ const DeviceInfo = () => {
     // 表格数据
     const tableData = [  
         {  
-          code: "001",  
-          name: "Product A",  
-          type: "type1",  
-          creatorName: "John Doe",  
-          createTime: "2023-01-15",  
-          updateTime: "2024-04-10"  
+          device_id: "001",  
+          device_name: "Product A",  
+          creator: "John Doe",  
+          online: 1,
+          create_date: "2023-01-15",  
+          last_update_date: "2024-04-10",
+          description: "asd"
         },  
         {  
-          code: "002",  
-          name: "Product B",  
-          type: "type2",  
-          creatorName: "Jane Smith",  
-          createTime: "2022-11-30",  
-          updateTime: "2024-03-20"  
+          device_id: "002",  
+          device_name: "Product B",  
+          creator: "John Doe",  
+          online: 1,
+          create_date: "2023-01-15",  
+          last_update_date: "2024-04-10" ,
+          description: "asd"
         },  
         // 可以继续添加更多数据项  
       ];  
@@ -83,11 +90,20 @@ const DeviceInfo = () => {
         if (confirmed) {
             // 获取修改结果
             let postData = {
-                id: deleteid
+                device_id: deleteid
             };
-            message.info(postData)
+            axios.post(server + `api/device_api/deleteDevice`, postData).then(res => {
+                if (res.data.signal === "success") {
+                    message.info("删除设备成功");
+                    tableData = tableData.filter((item, index )=> index !== deleteid);
+                    props.history.go(-1);
+                } else {
+                    message.error("删除设备失败，" + res.data.message);
+                }
+            }).catch(err => {
+                message.error("删除设备失败");
+            });
         }
-
     }
 
 
@@ -102,6 +118,11 @@ const DeviceInfo = () => {
         6: "智能无线设备",
         7: "其他",
       };
+    
+    const onlineMapping = {
+        0: "离线",
+        1: "在线",
+    };
 
     const columns = [
         {title: "编号", dataIndex: "code", key: "code"},
@@ -213,13 +234,13 @@ const DeviceInfo = () => {
                         name="basic"  
                         onSubmit={searchData}  
                     >  
-                        <Form.Item name="code" rules={[{ required: false }]}>  
+                        <Form.Item name="device_id" rules={[{ required: false }]}>  
                             <Input prefix={<UserOutlined />} placeholder="设备编号" style={{ width: 170 }}   />  
                         </Form.Item>  
-                        <Form.Item name="name" rules={[{ required: false }]}>  
+                        <Form.Item name="device_name" rules={[{ required: false }]}>  
                             <Input prefix={<FormOutlined />} placeholder="设备名称" />  
                         </Form.Item>  
-                        <Form.Item name="type" rules={[{ required: false }]}>  
+                        <Form.Item name="device_type" rules={[{ required: false }]}>  
                             <Select  
                                 showSearch  
                                 style={{ width: 150 }}  
@@ -317,20 +338,6 @@ const DeviceInfo = () => {
                 <Row gutter={16}>
                     <Col span={12}>
                     <Form.Item
-                        name="设备编号"
-                        label="ID"
-                        rules={[
-                        {
-                            required: true,
-                            message: '请输入设备编号（唯一）！',
-                        },
-                        ]}
-                    >
-                        <Input placeholder="Device id" />
-                    </Form.Item>
-                    </Col>
-                    <Col span={12}>
-                    <Form.Item
                         name="设备名称"
                         label="Name"
                         rules={[
@@ -348,8 +355,6 @@ const DeviceInfo = () => {
                         />
                     </Form.Item>
                     </Col>
-                </Row>
-                <Row gutter={16}>
                     <Col span={12}>
                     <Form.Item
                         name="owner"
@@ -367,6 +372,8 @@ const DeviceInfo = () => {
                         </Select>
                     </Form.Item>
                     </Col>
+                </Row>
+                <Row gutter={16}>
                     <Col span={12}>
                     <Form.Item
                         name="type"
@@ -382,6 +389,25 @@ const DeviceInfo = () => {
                             {Object.keys(typeMapping).map(key => (  
                                 <Option key={key} value={key}>  
                                     {typeMapping[key]}  
+                                </Option>  
+                            ))}  
+                        </Select>  
+                    </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                    <Form.Item
+                        name="在线状态"
+                        label="Online"
+                        rules={[
+                        {
+                            required: true,
+                        },
+                        ]}
+                    >
+                        <Select placeholder="请选择在线状态">  
+                            {Object.keys(onlineMapping).map(key => (  
+                                <Option key={key} value={key}>  
+                                    {onlineMapping[key]}  
                                 </Option>  
                             ))}  
                         </Select>  

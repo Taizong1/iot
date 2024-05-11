@@ -5,6 +5,9 @@ import {Col, Table, Row, Statistic, Icon, message} from "antd";
 import {Map, Marker, NavigationControl, InfoWindow} from 'react-bmapgl';
 import { WarningOutlined, CheckCircleOutlined, LoadingOutlined } from '@ant-design/icons';
 import {Polyline} from 'react-bmapgl'
+
+const server = "http://10.214.241.121:8080";
+
 const BMapGL = window.BMapGL
 const DeviceData = props => {
     // 初始化地图
