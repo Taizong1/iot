@@ -92,10 +92,10 @@ const DeviceData = props => {
     let [load, setLoad] = useState(false);
 
     // 初始化时候请求一次数据
-    useEffect(() => {
+    // useEffect(() => {
         
-        setData(initialData)
-    });
+        // setData(initialData)
+    // });
 
     // 点击下面的分页按钮触发的方法
     const pageChange = useCallback(
@@ -146,25 +146,25 @@ const DeviceData = props => {
         }  
       };  
       
-    useEffect(() => {
-        const BMapGL = window.BMapGL
-        const pois = initialData.map(item => ({ lng: item.lng, lat: item.lat }));  
-        const map = new BMapGL.Map("container");
-        //可修改初始缩放等级
-        map.centerAndZoom(pois[0], 7);
-        map.enableScrollWheelZoom(true); //鼠标缩放
-        var zoomCtrl = new BMapGL.ZoomControl();  // (地图右下角+ - 缩放按钮) 添加缩放控件
-        map.addControl(zoomCtrl);
+    // useEffect(() => {
+    //     const BMapGL = window.BMapGL
+    //     const pois = initialData.map(item => ({ lng: item.lng, lat: item.lat }));  
+    //     const map = new BMapGL.Map("container");
+    //     //可修改初始缩放等级
+    //     map.centerAndZoom(pois[0], 7);
+    //     map.enableScrollWheelZoom(true); //鼠标缩放
+    //     var zoomCtrl = new BMapGL.ZoomControl();  // (地图右下角+ - 缩放按钮) 添加缩放控件
+    //     map.addControl(zoomCtrl);
 
-        const polyline = new BMapGL.Polyline(pois, {
-            enableEditing: false,
-            enableClicking: true,
-            strokeWeight: 6,
-            strokeOpacity: 0.8,
-            strokeColor: "#f5c104",
-          });
-          map.addOverlay(polyline);
-    }, [])
+    //     const polyline = new BMapGL.Polyline(pois, {
+    //         enableEditing: false,
+    //         enableClicking: true,
+    //         strokeWeight: 6,
+    //         strokeOpacity: 0.8,
+    //         strokeColor: "#f5c104",
+    //       });
+    //       map.addOverlay(polyline);
+    // }, [])
 
     return (
         

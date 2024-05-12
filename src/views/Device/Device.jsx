@@ -56,7 +56,7 @@ const DeviceInfo = props => {
     let [pageSize, setPageSize] = useState(10);
 
     // 表格数据
-    const tableData = [  
+    let tableData = [  
         {  
           device_id: "001",  
           device_name: "Product A",  
@@ -159,7 +159,8 @@ const DeviceInfo = props => {
 
     // 初始化时候请求一次数据
     useEffect(() => {
-        pageChange(page, pageSize);
+        
+        // pageChange(page, pageSize);
         // eslint-disable-next-line
     }, []);
 
@@ -226,6 +227,7 @@ const DeviceInfo = props => {
 
     return (
         <Layout>
+            {props.deviceType}
             <Row className="base-style">
                 <Collapse defaultActiveKey={["1"]} style={{marginBottom: "20px"}}>
                     <Panel header="搜索设备" key="1">
