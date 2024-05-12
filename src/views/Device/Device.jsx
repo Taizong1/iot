@@ -21,6 +21,7 @@ import axios from "axios";
 
 import {UserOutlined, FormOutlined,PlusOutlined} from "@ant-design/icons";
 import DeviceData from "./DeviceData";
+import { useForm } from "antd/es/form/Form";
 
 
 const server = "http://10.214.241.121:8080";
@@ -34,6 +35,7 @@ const DeviceInfo = props => {
     // 抽屉
     const [open, setOpen] = useState(false);
     let [editRecord, setEditRecord] = useState(null);
+    let [tableData, setTableData] = useState([]);
 
     const showDrawer = () => {
         setOpen(true);
@@ -50,35 +52,12 @@ const DeviceInfo = props => {
         type: null
     };
 
+    const [form] = Form.useForm();
+
     // 设置分页
     let [total, setTotal] = useState(0);
     let [page, setPage] = useState(1);
     let [pageSize, setPageSize] = useState(10);
-
-    // 表格数据
-    let tableData = [  
-        {  
-          device_id: "001",  
-          device_name: "Product A",  
-          device_type: "智能物联网设备",
-          creator: "John Doe",  
-          online: 1,
-          create_date: "2023-01-15",  
-          last_update_date: "2024-04-10",
-          description: "asd"
-        },  
-        {  
-          device_id: "002",  
-          device_name: "Product B",  
-          creator: "John Doe",  
-          device_type: "智能穿戴设备",
-          online: 1,
-          create_date: "2023-01-15",  
-          last_update_date: "2024-04-10" ,
-          description: "asd"
-        },  
-        // 可以继续添加更多数据项  
-      ];  
 
     // loading状态
     let [load, setLoad] = useState(false);
@@ -86,7 +65,6 @@ const DeviceInfo = props => {
     // 选择的设备
     let [showRecord, setShowRecord] = useState([]);
 
-    //TODO: 设备删除逻辑
     const handleDelete = deleteid => {
         const confirmed = window.confirm("确定要删除吗？");
         if (confirmed) {
@@ -107,8 +85,6 @@ const DeviceInfo = props => {
             });
         }
     }
-
-
 
     const typeMapping = {
         0: "智能物联网设备",
@@ -160,9 +136,14 @@ const DeviceInfo = props => {
     // 初始化时候请求一次数据
     useEffect(() => {
         
-        // pageChange(page, pageSize);
+        pageChange(page, pageSize);
         // eslint-disable-next-line
     }, []);
+
+    useEffect(() => {
+        fetchData();
+        // eslint-disable-next-line
+    }, [props.deviceType]);
 
     // 点击下面的分页按钮触发的方法
     const pageChange = useCallback(
@@ -174,28 +155,48 @@ const DeviceInfo = props => {
                 // eslint-disable-next-line
                 (pageSize = currentSize === undefined ? pageSize : currentSize)
             );
-            fetchData();
         },
         // eslint-disable-next-line
         
     );
 
     // 获取数据
-    //TODO: 界面初始化
     const fetchData = async () => {
         // 开始加载
         setLoad(true);
 
         let postData = {
-            page: page,
-            pageSize: pageSize,
-            code: filter.code,
-            name: filter.name,
-            creatorName: filter.creatorName,
-            type: filter.type,
-            startTime: filter.startTime,
-            endTime: filter.endTime
+            device_type: props.deviceType
         };
+
+        axios.post(server + `api/device_api/getTypeDevice `, postData).then(res => {
+            setTableData(res.data.devices);
+        }).catch(err => {
+            message.error("获取" + props.deviceType + "设备失败");
+            setTableData( [  
+                {  
+                  device_id: "001",  
+                  device_name: "Product A",  
+                  device_type: "智能物联网设备",
+                  creator: "John Doe",  
+                  online: 1,
+                  create_date: "2023-01-15",  
+                  last_update_date: "2024-04-10",
+                  description: "asd"
+                },  
+                {  
+                  device_id: "002",  
+                  device_name: "Product B",  
+                  creator: "John Doe",  
+                  device_type: "智能穿戴设备",
+                  online: 1,
+                  create_date: "2023-01-15",  
+                  last_update_date: "2024-04-10" ,
+                  description: "asd"
+                },  
+                // 可以继续添加更多数据项  
+              ])
+        });
         
 
         // 加载完成
@@ -203,9 +204,40 @@ const DeviceInfo = props => {
     };
 
     // 点击搜索按钮触发的方法
-    //TODO: 查询指定设备
     const searchData = e => {
-
+        let postData = {
+            device_id: e.device_id,
+            device_name: e.device_name,
+            device_type: typeMapping[e.device_type]
+        };
+        axios.post(server + `api/device_api/getDefinedDevice  `, postData).then(res => {
+            setTableData(res.data.devices);
+        }).catch(err => {
+            message.error("获取指定设备失败");
+            setTableData( [  
+                {  
+                  device_id: "001",  
+                  device_name: "Product A",  
+                  device_type: "智能物联网设备",
+                  creator: "John Doe",  
+                  online: 1,
+                  create_date: "2023-01-15",  
+                  last_update_date: "2024-04-10",
+                  description: "asd"
+                },  
+                {  
+                  device_id: "002",  
+                  device_name: "Product B",  
+                  creator: "John Doe",  
+                  device_type: "智能穿戴设备",
+                  online: 1,
+                  create_date: "2023-01-15",  
+                  last_update_date: "2024-04-10" ,
+                  description: "asd"
+                },  
+                // 可以继续添加更多数据项  
+              ])
+        });
     };
 
     //TODO: 设备修改逻辑
@@ -214,7 +246,7 @@ const DeviceInfo = props => {
 
     };
 
-    //TODO: 设备修改逻辑
+    //TODO: 设备创建逻辑
     const submitCreate = e => {
         
         e.preventDefault();
@@ -222,21 +254,21 @@ const DeviceInfo = props => {
     };
 
     const formReset = () => {
-
+        form.resetFields();
     };
 
     return (
         <Layout>
-            {props.deviceType}
             <Row className="base-style">
                 <Collapse defaultActiveKey={["1"]} style={{marginBottom: "20px"}}>
                     <Panel header="搜索设备" key="1">
                     <Form  
+                        onFinish={searchData}  
                         className="list"  
                         autoComplete="off"  
                         layout="inline"  
                         name="basic"  
-                        onSubmit={searchData}  
+                        form = {form}
                     >  
                         <Form.Item name="device_id" rules={[{ required: false }]}>  
                             <Input prefix={<UserOutlined />} placeholder="设备编号" style={{ width: 170 }}   />  
