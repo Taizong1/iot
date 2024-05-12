@@ -56,10 +56,11 @@ const DeviceInfo = props => {
     let [pageSize, setPageSize] = useState(10);
 
     // 表格数据
-    const tableData = [  
+    let tableData = [  
         {  
           device_id: "001",  
           device_name: "Product A",  
+          device_type: "智能物联网设备",
           creator: "John Doe",  
           online: 1,
           create_date: "2023-01-15",  
@@ -70,6 +71,7 @@ const DeviceInfo = props => {
           device_id: "002",  
           device_name: "Product B",  
           creator: "John Doe",  
+          device_type: "智能穿戴设备",
           online: 1,
           create_date: "2023-01-15",  
           last_update_date: "2024-04-10" ,
@@ -125,12 +127,12 @@ const DeviceInfo = props => {
     };
 
     const columns = [
-        {title: "编号", dataIndex: "code", key: "code"},
-        {title: "名称", dataIndex: "name", key: "name"},
-        {title: "类型", dataIndex: "type", key: "type",render: type => typeMapping[type] || ""},
-        {title: "创建人", dataIndex: "creatorName", key: "creatorName"},
-        {title: "创建时间", dataIndex: "createTime", key: "createTime"},
-        {title: "最后上线", dataIndex: "updateTime", key: "updateTime"},
+        {title: "编号", dataIndex: "device_id", key: "device_id"},
+        {title: "名称", dataIndex: "device_name", key: "device_name"},
+        {title: "类型", dataIndex: "device_type", key: "device_type"},
+        {title: "创建人", dataIndex: "creator", key: "creator"},
+        {title: "创建时间", dataIndex: "create_date", key: "create_date"},
+        {title: "最后上线", dataIndex: "last_update_date", key: "last_update_date"},
         {
             title: "操作",
             render: record => {
@@ -157,7 +159,8 @@ const DeviceInfo = props => {
 
     // 初始化时候请求一次数据
     useEffect(() => {
-        pageChange(page, pageSize);
+        
+        // pageChange(page, pageSize);
         // eslint-disable-next-line
     }, []);
 
@@ -224,6 +227,7 @@ const DeviceInfo = props => {
 
     return (
         <Layout>
+            {props.deviceType}
             <Row className="base-style">
                 <Collapse defaultActiveKey={["1"]} style={{marginBottom: "20px"}}>
                     <Panel header="搜索设备" key="1">

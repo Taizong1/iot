@@ -1,15 +1,31 @@
-import React from 'react';
-import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
+import React, { useState } from 'react';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import deviceMenuItems from './deviceMenuItems';
 import DeviceInfo from './Device'
-const { Header, Content, Footer, Sider } = Layout;
+const { Content, Sider } = Layout;
 
+const typeMapping = {  
+  0: "智能物联网设备",  
+  1: "智能穿戴设备",  
+  2: "智能家居设备",  
+  3: "智能物流设备",  
+  4: "智能飞行器设备",  
+  5: "智能互联网设备",  
+  6: "智能无线设备",  
+  7: "其他",
+};  
 
 const Device = () => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
+  let [deviceType, setDeviceType] = useState("智能物联网设备");
+
+  let deviceTypeUpdate = (item) =>{
+    setDeviceType(typeMapping[item.key.substr(3)-1])
+  }
+
   return (
     <Layout>
       <Content
@@ -41,8 +57,8 @@ const Device = () => {
           >
             <Menu
               mode="inline"
-              defaultSelectedKeys={['1']}
-              defaultOpenKeys={['sub1']}
+              onSelect={deviceTypeUpdate}
+              defaultSelectedKeys={['sub1']}
               style={{
                 height: '100%',
               }}
@@ -55,7 +71,7 @@ const Device = () => {
               minHeight: 400,
             }}
           >
-            <DeviceInfo />
+            <DeviceInfo deviceType = {deviceType}/>
           </Content>
         </Layout>
       </Content>
