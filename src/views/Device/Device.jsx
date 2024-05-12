@@ -23,6 +23,8 @@ import {UserOutlined, FormOutlined,PlusOutlined} from "@ant-design/icons";
 import DeviceData from "./DeviceData";
 import { useForm } from "antd/es/form/Form";
 
+import {store} from '../../components/reducer/store';
+
 
 const server = "http://10.214.241.121:8080";
 
@@ -35,15 +37,8 @@ const DeviceInfo = props => {
     // 抽屉
     const [open, setOpen] = useState(false);
     let [editRecord, setEditRecord] = useState(null);
+    let [isEdit, setIsEdit] = useState(0);
     let [tableData, setTableData] = useState([]);
-
-    const showDrawer = () => {
-        setOpen(true);
-    };
-
-    const onClose = () => {
-        setOpen(false);
-    };
 
     // 搜索条件
     let filter = {
@@ -53,6 +48,8 @@ const DeviceInfo = props => {
     };
 
     const [form] = Form.useForm();
+    const [deviceForm] = Form.useForm();
+
 
     // 设置分页
     let [total, setTotal] = useState(0);
@@ -75,7 +72,8 @@ const DeviceInfo = props => {
             axios.post(server + `api/device_api/deleteDevice`, postData).then(res => {
                 if (res.data.signal === "success") {
                     message.info("删除设备成功");
-                    tableData = tableData.filter((item, index )=> index !== deleteid);
+                    let newTableData = tableData.filter((item, index )=> index !== deleteid);
+                    setTableData(newTableData);
                     props.history.go(-1);
                 } else {
                     message.error("删除设备失败，" + res.data.message);
@@ -116,7 +114,12 @@ const DeviceInfo = props => {
                     <div>
                     <Button
                         type="dashed"
-                        onClick={showDrawer}
+                        onClick={()=>{
+                            deviceForm.resetFields();
+                            setOpen(true);
+                            setIsEdit(1);
+                            setEditRecord(record);
+                        }}
                     >
                         编辑
                     </Button>
@@ -240,17 +243,60 @@ const DeviceInfo = props => {
         });
     };
 
-    //TODO: 设备修改逻辑
-    const submitEdit = e => {
-        e.preventDefault();
-
-    };
-
-    //TODO: 设备创建逻辑
-    const submitCreate = e => {
-        
-        e.preventDefault();
-
+    const deviceCreateOrUpdate = e => {
+        console.log(e)
+        if(isEdit === 1){//编辑
+            let postData = {
+                device_id: editRecord.device_id,
+                device_name: e.device_name,
+                device_type: e.device_type,
+                online: e.online,
+                description: e.description
+            };
+            axios.post(server + `api/device_api/modifyDevice`, postData).then(res => {
+                let newTableData = tableData;
+                let index = tableData.findIndex(item => item.device_id === editRecord.device_id);
+                newTableData[index] = {
+                  device_id: editRecord.device_id,
+                  device_name: e.device_name,
+                  device_type: e.device_type,
+                  online: e.online,
+                  creator: editRecord.creator,
+                  create_date: editRecord.creator, 
+                  last_update_date: new Date().now(),
+                  description: e.description
+                }
+                setTableData(newTableData);
+            }).catch(err => {
+                message.error("编辑指定设备失败");
+            });
+        }else{//创建
+            let postData = {
+                device_name: e.device_name,
+                device_type: e.device_type,
+                creator: e.creator,
+                online: e.online,
+                description: e.description
+            };
+            axios.post(server + `api/device_api/createDevice`, postData).then(res => {
+                if(e.device_type === props.deviceType){
+                    let newTableData = tableData;
+                    newTableData.push({
+                        device_id: res.data.device_id,
+                        device_name: e.device_name,
+                        device_type: e.device_type,
+                        online: e.online,
+                        creator: editRecord.creator,
+                        create_date: new Date().now(), 
+                        last_update_date: new Date().now(),
+                        description: e.description
+                    })
+                    setTableData(newTableData);
+                }
+            }).catch(err => {
+                message.error("创建指定设备失败");
+            });
+        }
     };
 
     const formReset = () => {
@@ -341,7 +387,12 @@ const DeviceInfo = props => {
                 </Row>
                 <Row>
                     <Button
-                        type="primary" onClick={showDrawer} icon={<PlusOutlined />}
+                        type="primary" onClick={()=>{
+                            deviceForm.resetFields();
+                            setOpen(true);
+                            setIsEdit(2);
+                            setEditRecord(null);
+                        }} icon={<PlusOutlined />}
                     >
                         创建设备
                     </Button>
@@ -354,7 +405,7 @@ const DeviceInfo = props => {
             <Drawer
                 
                 width={600}
-                onClose={onClose}
+                onClose={()=>{setOpen(false);}}
                 open={open}
                 styles={{
                 body: {
@@ -363,18 +414,19 @@ const DeviceInfo = props => {
                 }}
                 extra={
                 <Space>
-                    <Button onClick={onClose}>Cancel</Button>
-                    <Button onClick={onClose} type="primary">
-                    Submit
-                    </Button>
+                    <Button onClick={()=>{setOpen(false);}}>Cancel</Button>
+                    <Button onClick={()=>{deviceForm.submit();}} type="primary" >Submit</Button>
                 </Space>
                 }
             >
-                <Form layout="vertical" >
+                <Form layout="vertical"
+                    onFinish={deviceCreateOrUpdate} 
+                    form = {deviceForm}
+                >
                 <Row gutter={16}>
                     <Col span={12}>
                     <Form.Item
-                        name="设备名称"
+                        name="device_name"
                         label="Name"
                         rules={[
                         {
@@ -382,6 +434,7 @@ const DeviceInfo = props => {
                             message: '请输入设备名称！',
                         },
                         ]}
+                        initialValue={editRecord === null ? null : editRecord.device_name}
                     >
                         <Input
                         style={{
@@ -393,35 +446,39 @@ const DeviceInfo = props => {
                     </Col>
                     <Col span={12}>
                     <Form.Item
-                        name="owner"
-                        label="Owner"
+                        name="creator"
+                        label="Creator"
                         rules={[
                         {
                             required: true,
                             message: 'Please select an owner',
                         },
                         ]}
+                        initialValue={editRecord === null ? store.getState().userName : editRecord.creator}
                     >
-                        <Select placeholder="Please select an owner">
-                        <Option value="xiao">Xiaoxiao Fu</Option>
-                        <Option value="mao">Maomao Zhou</Option>
-                        </Select>
+                        <Input
+                            style={{
+                                width: '100%',
+                            }}
+                            disabled
+                        />
                     </Form.Item>
                     </Col>
                 </Row>
                 <Row gutter={16}>
                     <Col span={12}>
                     <Form.Item
-                        name="type"
-                        label="Type"
+                        name="device_type"
+                        label="Device Type"
                         rules={[
                         {
                             required: true,
                             message: 'Please choose the type',
-                        },
+                        }
                         ]}
+                        initialValue={editRecord === null ? "其他" : editRecord.device_type}
                     >
-                        <Select placeholder="Please choose the type">  
+                        <Select >  
                             {Object.keys(typeMapping).map(key => (  
                                 <Option key={key} value={key}>  
                                     {typeMapping[key]}  
@@ -432,15 +489,16 @@ const DeviceInfo = props => {
                     </Col>
                     <Col span={12}>
                     <Form.Item
-                        name="在线状态"
+                        name="online"
                         label="Online"
                         rules={[
                         {
                             required: true,
                         },
                         ]}
+                        initialValue={editRecord === null ? "离线" : onlineMapping[editRecord.online]}
                     >
-                        <Select placeholder="请选择在线状态">  
+                        <Select >
                             {Object.keys(onlineMapping).map(key => (  
                                 <Option key={key} value={key}>  
                                     {onlineMapping[key]}  
@@ -462,8 +520,11 @@ const DeviceInfo = props => {
                             message: 'please enter url description',
                         },
                         ]}
+                        initialValue={editRecord === null ? null : editRecord.description}
                     >
-                        <Input.TextArea rows={4} placeholder="please enter url description" />
+                        <Input.TextArea rows={4} 
+                        placeholder="please enter url description" 
+                        />
                     </Form.Item>
                     </Col>
                 </Row>
