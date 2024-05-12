@@ -357,7 +357,7 @@ const DeviceInfo = props => {
             <Row className="base-style">
                 <Row>
                     <Table
-                        rowKey="id"
+                        rowKey="device_id"
                         columns={columns}
                         loading={load}
                         dataSource={tableData}
@@ -369,7 +369,7 @@ const DeviceInfo = props => {
                             },
                             type: "radio",
                             getCheckboxProps: record => ({
-                                name: record.name
+                                name: record.device_name
                             })
                         }}
                         pagination={{
