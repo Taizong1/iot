@@ -41,8 +41,7 @@ const Device = () => {
           >
             <Menu
               mode="inline"
-              defaultSelectedKeys={['1']}
-              defaultOpenKeys={['sub1']}
+              defaultSelectedKeys={['sub1']}
               style={{
                 height: '100%',
               }}
