@@ -172,29 +172,29 @@ const DeviceInfo = props => {
             setTableData(res.data.devices);
         }).catch(err => {
             message.error("获取" + props.deviceType + "设备失败");
-            // setTableData( [  
-            //     {  
-            //       device_id: "001",  
-            //       device_name: "Product A",  
-            //       device_type: "智能物联网设备",
-            //       creator: "John Doe",  
-            //       online: 1,
-            //       create_date: "2023-01-15",  
-            //       last_update_date: "2024-04-10",
-            //       description: "asd"
-            //     },  
-            //     {  
-            //       device_id: "002",  
-            //       device_name: "Product B",  
-            //       creator: "John Doe",  
-            //       device_type: "智能穿戴设备",
-            //       online: 1,
-            //       create_date: "2023-01-15",  
-            //       last_update_date: "2024-04-10" ,
-            //       description: "asd"
-            //     },  
-            //     // 可以继续添加更多数据项  
-            //   ])
+            setTableData( [  
+                {  
+                  device_id: "001",  
+                  device_name: "Product A",  
+                  device_type: "智能物联网设备",
+                  creator: "John Doe",  
+                  online: 1,
+                  create_date: "2023-01-15",  
+                  last_update_date: "2024-04-10",
+                  description: "asd"
+                },  
+                {  
+                  device_id: "002",  
+                  device_name: "Product B",  
+                  creator: "John Doe",  
+                  device_type: "智能穿戴设备",
+                  online: 1,
+                  create_date: "2023-01-15",  
+                  last_update_date: "2024-04-10" ,
+                  description: "asd"
+                },  
+                // 可以继续添加更多数据项  
+              ])
         });
         
 
@@ -205,7 +205,39 @@ const DeviceInfo = props => {
     // 点击搜索按钮触发的方法
     //TODO: 查询指定设备
     const searchData = e => {
-
+        let postData = {
+            device_id: e.device_id,
+            device_name: e.device_name,
+            device_type: typeMapping[e.device_type]
+        };
+        axios.post(server + `api/device_api/getDefinedDevice  `, postData).then(res => {
+            setTableData(res.data.devices);
+        }).catch(err => {
+            message.error("获取指定设备失败");
+            setTableData( [  
+                {  
+                  device_id: "001",  
+                  device_name: "Product A",  
+                  device_type: "智能物联网设备",
+                  creator: "John Doe",  
+                  online: 1,
+                  create_date: "2023-01-15",  
+                  last_update_date: "2024-04-10",
+                  description: "asd"
+                },  
+                {  
+                  device_id: "002",  
+                  device_name: "Product B",  
+                  creator: "John Doe",  
+                  device_type: "智能穿戴设备",
+                  online: 1,
+                  create_date: "2023-01-15",  
+                  last_update_date: "2024-04-10" ,
+                  description: "asd"
+                },  
+                // 可以继续添加更多数据项  
+              ])
+        });
     };
 
     //TODO: 设备修改逻辑
@@ -231,11 +263,11 @@ const DeviceInfo = props => {
                 <Collapse defaultActiveKey={["1"]} style={{marginBottom: "20px"}}>
                     <Panel header="搜索设备" key="1">
                     <Form  
+                        onFinish={searchData}  
                         className="list"  
                         autoComplete="off"  
                         layout="inline"  
                         name="basic"  
-                        onSubmit={searchData}  
                     >  
                         <Form.Item name="device_id" rules={[{ required: false }]}>  
                             <Input prefix={<UserOutlined />} placeholder="设备编号" style={{ width: 170 }}   />  
