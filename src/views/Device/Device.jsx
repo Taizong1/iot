@@ -21,6 +21,7 @@ import axios from "axios";
 
 import {UserOutlined, FormOutlined,PlusOutlined} from "@ant-design/icons";
 import DeviceData from "./DeviceData";
+import { useForm } from "antd/es/form/Form";
 
 
 const server = "http://10.214.241.121:8080";
@@ -51,6 +52,8 @@ const DeviceInfo = props => {
         type: null
     };
 
+    const [form] = Form.useForm();
+
     // 设置分页
     let [total, setTotal] = useState(0);
     let [page, setPage] = useState(1);
@@ -62,7 +65,6 @@ const DeviceInfo = props => {
     // 选择的设备
     let [showRecord, setShowRecord] = useState([]);
 
-    //TODO: 设备删除逻辑
     const handleDelete = deleteid => {
         const confirmed = window.confirm("确定要删除吗？");
         if (confirmed) {
@@ -159,7 +161,6 @@ const DeviceInfo = props => {
     );
 
     // 获取数据
-    //TODO: 界面初始化
     const fetchData = async () => {
         // 开始加载
         setLoad(true);
@@ -203,7 +204,6 @@ const DeviceInfo = props => {
     };
 
     // 点击搜索按钮触发的方法
-    //TODO: 查询指定设备
     const searchData = e => {
         let postData = {
             device_id: e.device_id,
@@ -246,7 +246,7 @@ const DeviceInfo = props => {
 
     };
 
-    //TODO: 设备修改逻辑
+    //TODO: 设备创建逻辑
     const submitCreate = e => {
         
         e.preventDefault();
@@ -254,7 +254,7 @@ const DeviceInfo = props => {
     };
 
     const formReset = () => {
-
+        form.resetFields();
     };
 
     return (
@@ -268,6 +268,7 @@ const DeviceInfo = props => {
                         autoComplete="off"  
                         layout="inline"  
                         name="basic"  
+                        form = {form}
                     >  
                         <Form.Item name="device_id" rules={[{ required: false }]}>  
                             <Input prefix={<UserOutlined />} placeholder="设备编号" style={{ width: 170 }}   />  
