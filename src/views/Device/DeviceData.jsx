@@ -19,7 +19,6 @@ const DeviceData = props => {
         {  
           id: 1,  
           info: "这是第一条数据的信息",  
-          code: "A1",  
           value: 100,  
           alert: false,  
           timestamp: "2024-04-24 12:00:00",  
@@ -29,7 +28,6 @@ const DeviceData = props => {
         {  
           id: 2,  
           info: "这是第二条数据的信息",  
-          code: "B2",  
           value: 75,  
           alert: true,  
           timestamp: "2024-04-24 12:05:00",  
@@ -39,7 +37,6 @@ const DeviceData = props => {
         {  
             id: 3,  
             info: "这是第三条数据的信息",  
-            code: "C3",  
             value: 60,  
             alert: false,  
             timestamp: "2024-04-24 12:10:00",  
@@ -49,7 +46,6 @@ const DeviceData = props => {
           {  
             id: 4,  
             info: "这是第四条数据的信息",  
-            code: "D4",  
             value: 90,  
             alert: true,  
             timestamp: "2024-04-24 12:15:00",  
@@ -93,9 +89,12 @@ const DeviceData = props => {
 
     // 初始化时候请求一次数据
     useEffect(() => {
-        
-        setData(initialData)
-    });
+        const record = props.record;
+        if (record.length !== 0) {
+            pageChange(page, pageSize, record);
+        }
+        // eslint-disable-next-line
+    }, [props.record]);
 
     // 点击下面的分页按钮触发的方法
     const pageChange = useCallback(
@@ -131,6 +130,7 @@ const DeviceData = props => {
             code: code
         };
 
+        setLoad(false);
 
     }
 
@@ -206,7 +206,6 @@ const DeviceData = props => {
                             return {
                                 onMouseEnter: event => {
                                     deviceMessage = {
-                                        code: record.code,
                                         value: record.value,
                                         alert: record.alert,
                                         info: record.info,
