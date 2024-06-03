@@ -1,4 +1,4 @@
-import { HomeOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
+import { HomeOutlined, MailOutlined, SettingOutlined ,FundProjectionScreenOutlined} from '@ant-design/icons';
 
 const menus = [
   {
@@ -17,7 +17,8 @@ const menus = [
   {
     label: '数据大屏',
     key: 'screen',
-    icon: <HomeOutlined />,
+    icon: <FundProjectionScreenOutlined />,
+    path:"/screen",
     
   },
   {

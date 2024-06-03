@@ -1,0 +1,21 @@
+.base-style {  
+    background-color: #fff;  
+    margin-bottom: 1rem;  
+    padding: 1.5rem;  
+    border-radius: 5px;  
+    box-shadow: 0px 2px 13px 0px rgba(228, 228, 228, 0.6);  
+  }  
+.bigFont {  
+    font-size: 24px; /* 调整字体大小 */  
+    font-family: 'Arial', sans-serif; /* 使用 Arial 字体，也可以根据需要选择其他字体 */  
+    font-weight: bold; /* 加粗 */  
+    color: #333; /* 设定颜色 */  
+    /* 其他样式设定，比如居中、加阴影等 */  
+  }  
+.headFont {  
+    font-size: 18px; /* 调整字体大小 */  
+    font-family: 'Arial', sans-serif; /* 使用 Arial 字体，也可以根据需要选择其他字体 */  
+    font-weight: bold; /* 加粗 */  
+    color: #333; /* 设定颜色 */  
+    /* 其他样式设定，比如居中、加阴影等 */  
+  }  

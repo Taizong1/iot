@@ -48,7 +48,7 @@ const menus = [
     label: '数据大屏',
     key: 'screen',
     icon: <HomeOutlined />,
-    
+    path:"/screen",
   },
   {
     label: '用户中心',
