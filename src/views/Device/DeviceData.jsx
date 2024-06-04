@@ -6,7 +6,7 @@ import {Map, Marker, NavigationControl, InfoWindow} from 'react-bmapgl';
 import { WarningOutlined, CheckCircleOutlined, LoadingOutlined } from '@ant-design/icons';
 import {Polyline} from 'react-bmapgl'
 
-const server = "http://10.214.241.121:8080";
+const server = "http://10.214.241.121:8081";
 
 const BMapGL = window.BMapGL
 const DeviceData = props => {

@@ -26,7 +26,7 @@ import { useForm } from "antd/es/form/Form";
 import {store} from '../../components/reducer/store';
 
 
-const server = "http://10.214.241.121:8080";
+const server = "http://10.214.241.121:8081";
 
 const {Panel} = Collapse;
 const {Option} = Select;
