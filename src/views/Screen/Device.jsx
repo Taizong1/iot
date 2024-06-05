@@ -89,7 +89,7 @@ const DeviceInfo = props => {
       <Row gutter={24} className="index-header">
       <Col span={24}>
       <div className="base-style">
-      <div className="bigFont">当前类别设备的总数: 20</div>  
+      <div className="bigFont">当前类别设备的总数: {totalDeviceCountNow}</div>  
       </div>
       </Col>
       </Row>
