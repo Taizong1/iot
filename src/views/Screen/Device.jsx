@@ -7,7 +7,7 @@ import {
 } from "antd";
 import "./style.css"
 
-import { FullscreenOutlined } from '@ant-design/icons';  
+import axios from "axios";
 import Line from "./chart/line.jsx";
 import Bar from "./chart/bar.jsx"
 import Scatter from "./chart/scatter.jsx"
