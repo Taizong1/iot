@@ -102,7 +102,7 @@ const DeviceInfo = props => {
               
             </div>
             <Divider />
-            <Line />
+            <Line {...{totalDevice, onlineTotalDevice, notOnlintotalDevice, timeLabel}}/>
           </div> 
         </Col>
         <Col span={12}>  
