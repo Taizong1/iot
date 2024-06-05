@@ -94,6 +94,18 @@ const DeviceInfo = props => {
         6: "智能无线设备",
         7: "其他",
       };
+
+      const TypeMapping = {
+        0: "智能物联网设备",
+        1: "智能穿戴设备",
+        2: "智能家居设备",
+        3: "智能物流设备",
+        4: "智能飞行器设备",
+        5: "智能互联网设备",
+        6: "智能无线设备",
+        7: "其他",
+        "其他": "其他",
+      };
     
     const onlineMapping = {
         0: "离线",
@@ -176,32 +188,7 @@ const DeviceInfo = props => {
             setTableData(res.data.devices);
         }).catch(err => {
             message.error("获取" + props.deviceType + "设备失败");
-            setTableData( [  
-                {  
-                  device_id: "001",  
-                  device_name: "Product A",  
-                  device_type: "智能物联网设备",
-                  creator: "John Doe",  
-                  online: 1,
-                  creation_date: "2023-01-15",  
-                  last_update_date: "2024-04-10",
-                  description: "asd"
-                },  
-                {  
-                  device_id: "002",  
-                  device_name: "Product B",  
-                  creator: "John Doe",  
-                  device_type: "智能穿戴设备",
-                  online: 1,
-                  creation_date: "2023-01-15",  
-                  last_update_date: "2024-04-10" ,
-                  description: "asd"
-                },  
-                // 可以继续添加更多数据项  
-              ])
         });
-        
-
         // 加载完成
         setLoad(false);
     };
@@ -245,6 +232,7 @@ const DeviceInfo = props => {
 
     const deviceCreateOrUpdate = e => {
         console.log(e)
+        e.device_type = TypeMapping[e.device_type]
         if(isEdit === 1){//编辑
             let postData = {
                 device_id: editRecord.device_id,
