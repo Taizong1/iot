@@ -59,9 +59,30 @@ const DeviceData = props => {
                 lat: item.latitude,
                 lng: item.longitude,
                 value: item.value,
-                time: item.timestamp
+                time: new Date(item.timestamp)
             })
         })
+
+        
+        const BMapGL = window.BMapGL
+        const pois = recordData.map(item => ({ lng: item.lng, lat: item.lat }));  
+        const map = new BMapGL.Map("container");
+        //可修改初始缩放等级
+        map.centerAndZoom(pois[0], 7);
+        map.enableScrollWheelZoom(true); //鼠标缩放
+        var zoomCtrl = new BMapGL.ZoomControl();  // (地图右下角+ - 缩放按钮) 添加缩放控件
+        map.addControl(zoomCtrl);
+
+        const polyline = new BMapGL.Polyline(pois, {
+            enableEditing: false,
+            enableClicking: true,
+            strokeWeight: 6,
+            strokeOpacity: 0.8,
+            strokeColor: "#f5c104",
+          });
+          map.addOverlay(polyline);
+
+        console.log(recordData)
         setData(recordData)
         setTotal(recordData.length)
 
@@ -98,26 +119,6 @@ const DeviceData = props => {
           return <LoadingOutlined />;  
         }  
       };  
-      
-    useEffect(() => {
-        const BMapGL = window.BMapGL
-        const pois = data.map(item => ({ lng: item.lng, lat: item.lat }));  
-        const map = new BMapGL.Map("container");
-        //可修改初始缩放等级
-        map.centerAndZoom(pois[0], 7);
-        map.enableScrollWheelZoom(true); //鼠标缩放
-        var zoomCtrl = new BMapGL.ZoomControl();  // (地图右下角+ - 缩放按钮) 添加缩放控件
-        map.addControl(zoomCtrl);
-
-        const polyline = new BMapGL.Polyline(pois, {
-            enableEditing: false,
-            enableClicking: true,
-            strokeWeight: 6,
-            strokeOpacity: 0.8,
-            strokeColor: "#f5c104",
-          });
-          map.addOverlay(polyline);
-    }, [props.record])
 
     return (
         <div>

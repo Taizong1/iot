@@ -398,6 +398,30 @@ const DeviceInfo = props => {
                         创建设备
                     </Button>
                 </Row>
+                {/* <Row>
+                    <Button
+                        type="primary" 
+                        onClick={()=>{
+                            let time = new Date(new Date().getTime()).toISOString().slice(0, 19).replace('T', ' ');
+                            axios.post(messageServer+"/api/iotmessage_api/uploadMessage",{
+                                'device_id': 8,
+                                'timestamp': time,
+                                'alert': 1,
+                                'info': 'test1',
+                                'latitude': 121.1351,
+                                'longitude':30.2614,
+                                'value': 100
+                            }).then(res=>{
+                                console.log(res)
+
+                            }).catch(err=>{
+                                console.log(err)
+                            })
+                        }}
+                    >
+                        造数据
+                    </Button>
+                </Row> */}
             </Row>
             {showRecord.length > 0 &&
             <Row gutter={[16, 16]}>
