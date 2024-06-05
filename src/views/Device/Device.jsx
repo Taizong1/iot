@@ -26,7 +26,8 @@ import { useForm } from "antd/es/form/Form";
 import {store} from '../../components/reducer/store';
 
 
-const server = "http://10.214.241.121:8081";
+const deviceServer = "http://10.214.241.121:8081";
+const messageServer = "http://10.214.241.121:8082";
 
 const {Panel} = Collapse;
 const {Option} = Select;
@@ -65,20 +66,19 @@ const DeviceInfo = props => {
     const handleDelete = deleteid => {
         const confirmed = window.confirm("确定要删除吗？");
         if (confirmed) {
-            // 获取修改结果
             let postData = {
                 device_id: deleteid
             };
-            axios.post(server + `api/device_api/deleteDevice`, postData).then(res => {
+            axios.post(deviceServer + `/api/device_api/deleteDevice`, postData).then(res => {
                 if (res.data.signal === "success") {
                     message.info("删除设备成功");
-                    let newTableData = tableData.filter((item, index )=> index !== deleteid);
+                    let newTableData = tableData.filter((item, index )=> item.device_id != deleteid);
                     setTableData(newTableData);
-                    props.history.go(-1);
                 } else {
                     message.error("删除设备失败，" + res.data.message);
                 }
             }).catch(err => {
+                console.log(err)
                 message.error("删除设备失败");
             });
         }
@@ -94,6 +94,25 @@ const DeviceInfo = props => {
         6: "智能无线设备",
         7: "其他",
       };
+
+      const TypeMapping = {
+        0: "智能物联网设备",
+        1: "智能穿戴设备",
+        2: "智能家居设备",
+        3: "智能物流设备",
+        4: "智能飞行器设备",
+        5: "智能互联网设备",
+        6: "智能无线设备",
+        7: "其他",
+        智能物联网设备: "智能物联网设备",
+        智能穿戴设备: "智能穿戴设备",
+        智能家居设备: "智能家居设备",
+        智能物流设备: "智能物流设备",
+        智能飞行器设备: "智能飞行器设备",
+        智能互联网设备: "智能互联网设备",
+        智能无线设备: "智能无线设备",
+        其他: "其他",
+      };
     
     const onlineMapping = {
         0: "离线",
@@ -105,7 +124,7 @@ const DeviceInfo = props => {
         {title: "名称", dataIndex: "device_name", key: "device_name"},
         {title: "类型", dataIndex: "device_type", key: "device_type"},
         {title: "创建人", dataIndex: "creator", key: "creator"},
-        {title: "创建时间", dataIndex: "create_date", key: "create_date"},
+        {title: "创建时间", dataIndex: "creation_date", key: "creation_date"},
         {title: "最后上线", dataIndex: "last_update_date", key: "last_update_date"},
         {
             title: "操作",
@@ -123,7 +142,7 @@ const DeviceInfo = props => {
                     >
                         编辑
                     </Button>
-                    <Button onClick={() => handleDelete(record.id)}>
+                    <Button onClick={() => handleDelete(record.device_id)}>
                     删除
                     </Button>
 
@@ -172,36 +191,20 @@ const DeviceInfo = props => {
             device_type: props.deviceType
         };
 
-        axios.post(server + `api/device_api/getTypeDevice `, postData).then(res => {
+        axios.post(deviceServer + `/api/device_api/getTypeDevice `, postData).then(res => {
+            let data=res.data.devices;
+            data.map(item => {
+                let change = (time) => {
+                    return time.getFullYear() + "-" + (time.getMonth()+1)+"-"+time.getDate()+" "+time.getHours()+":"+time.getMinutes()+":"+time.getSeconds();
+                }
+                item.creation_date = change(new Date(item.creation_date))
+                item.last_update_date = change(new Date(item.last_update_date))
+            })
             setTableData(res.data.devices);
+            setTotal(res.data.devices.length)
         }).catch(err => {
             message.error("获取" + props.deviceType + "设备失败");
-            setTableData( [  
-                {  
-                  device_id: "001",  
-                  device_name: "Product A",  
-                  device_type: "智能物联网设备",
-                  creator: "John Doe",  
-                  online: 1,
-                  create_date: "2023-01-15",  
-                  last_update_date: "2024-04-10",
-                  description: "asd"
-                },  
-                {  
-                  device_id: "002",  
-                  device_name: "Product B",  
-                  creator: "John Doe",  
-                  device_type: "智能穿戴设备",
-                  online: 1,
-                  create_date: "2023-01-15",  
-                  last_update_date: "2024-04-10" ,
-                  description: "asd"
-                },  
-                // 可以继续添加更多数据项  
-              ])
         });
-        
-
         // 加载完成
         setLoad(false);
     };
@@ -209,65 +212,48 @@ const DeviceInfo = props => {
     // 点击搜索按钮触发的方法
     const searchData = e => {
         let postData = {
-            device_id: e.device_id,
-            device_name: e.device_name,
-            device_type: typeMapping[e.device_type]
+            device_id: e.device_id || null,
+            device_name: e.device_name || null,
+            device_type: TypeMapping[e.device_type] || null
         };
-        axios.post(server + `api/device_api/getDefinedDevice  `, postData).then(res => {
+        axios.post(deviceServer + `/api/device_api/getDefinedDevice  `, postData).then(res => {
             setTableData(res.data.devices);
         }).catch(err => {
             message.error("获取指定设备失败");
-            setTableData( [  
-                {  
-                  device_id: "001",  
-                  device_name: "Product A",  
-                  device_type: "智能物联网设备",
-                  creator: "John Doe",  
-                  online: 1,
-                  create_date: "2023-01-15",  
-                  last_update_date: "2024-04-10",
-                  description: "asd"
-                },  
-                {  
-                  device_id: "002",  
-                  device_name: "Product B",  
-                  creator: "John Doe",  
-                  device_type: "智能穿戴设备",
-                  online: 1,
-                  create_date: "2023-01-15",  
-                  last_update_date: "2024-04-10" ,
-                  description: "asd"
-                },  
-                // 可以继续添加更多数据项  
-              ])
         });
     };
 
     const deviceCreateOrUpdate = e => {
         console.log(e)
+        e.device_type = TypeMapping[e.device_type]
         if(isEdit === 1){//编辑
             let postData = {
                 device_id: editRecord.device_id,
                 device_name: e.device_name,
                 device_type: e.device_type,
-                online: e.online,
+                online: e.online == "离线" ? 0 : 1,
+                last_update_date: new Date(new Date().getTime()).toISOString().slice(0, 19).replace('T', ' '),
                 description: e.description
             };
-            axios.post(server + `api/device_api/modifyDevice`, postData).then(res => {
+            console.log(postData)
+            axios.post(deviceServer + `/api/device_api/modifyDevice`, postData).then(res => {
                 let newTableData = tableData;
                 let index = tableData.findIndex(item => item.device_id === editRecord.device_id);
                 newTableData[index] = {
                   device_id: editRecord.device_id,
                   device_name: e.device_name,
                   device_type: e.device_type,
-                  online: e.online,
-                  creator: editRecord.creator,
-                  create_date: editRecord.creator, 
-                  last_update_date: new Date().now(),
+                  online: e.online == "离线" ? 0 : 1,
+                  creator: e.creator,
+                  creation_date: editRecord.creation_date, 
+                  last_update_date: postData.last_update_date,
                   description: e.description
                 }
                 setTableData(newTableData);
+                setOpen(false);
+                message.success("编辑指定设备成功");
             }).catch(err => {
+                console.log(err)
                 message.error("编辑指定设备失败");
             });
         }else{//创建
@@ -275,25 +261,31 @@ const DeviceInfo = props => {
                 device_name: e.device_name,
                 device_type: e.device_type,
                 creator: e.creator,
-                online: e.online,
+                online: e.online == "离线" ? 0 : 1,
+                creation_date: new Date(new Date().getTime()).toISOString().slice(0, 19).replace('T', ' '),
                 description: e.description
             };
-            axios.post(server + `api/device_api/createDevice`, postData).then(res => {
+            console.log(postData)
+            axios.post(deviceServer + `/api/device_api/createDevice`, postData).then(res => {
+                console.log(res);
                 if(e.device_type === props.deviceType){
                     let newTableData = tableData;
                     newTableData.push({
                         device_id: res.data.device_id,
                         device_name: e.device_name,
                         device_type: e.device_type,
-                        online: e.online,
+                        online: e.online == "离线" ? 0 : 1,
                         creator: editRecord.creator,
-                        create_date: new Date().now(), 
-                        last_update_date: new Date().now(),
+                        creation_date: postData.creation_date,
+                        last_update_date: postData.creation_date,
                         description: e.description
                     })
                     setTableData(newTableData);
                 }
+                setOpen(false);
+                message.success("创建指定设备成功");
             }).catch(err => {
+                console.log(err)
                 message.error("创建指定设备失败");
             });
         }
@@ -302,6 +294,15 @@ const DeviceInfo = props => {
     const formReset = () => {
         form.resetFields();
     };
+
+    const handleMapRecord = record => {
+        axios.post(messageServer + "/api/iotmessage_api/getMessage", {device_id: record.device_id}).then(res => {
+            console.log(res.data)
+            setShowRecord(res.data.messages);
+        }).catch(err => {
+            console.log(err);
+        })
+    }
 
     return (
         <Layout>
@@ -365,7 +366,7 @@ const DeviceInfo = props => {
                         rowSelection={{
                             // row selection
                             onChange: (selectedRowKeys, selectedRows) => {
-                                setShowRecord(selectedRows);
+                                handleMapRecord(selectedRows[0]);
                             },
                             type: "radio",
                             getCheckboxProps: record => ({
@@ -397,11 +398,35 @@ const DeviceInfo = props => {
                         创建设备
                     </Button>
                 </Row>
+                {/* <Row>
+                    <Button
+                        type="primary" 
+                        onClick={()=>{
+                            let time = new Date(new Date().getTime()).toISOString().slice(0, 19).replace('T', ' ');
+                            axios.post(messageServer+"/api/iotmessage_api/uploadMessage",{
+                                'device_id': 8,
+                                'timestamp': time,
+                                'alert': 1,
+                                'info': 'test1',
+                                'latitude': 121.1351,
+                                'longitude':30.2614,
+                                'value': 100
+                            }).then(res=>{
+                                console.log(res)
+
+                            }).catch(err=>{
+                                console.log(err)
+                            })
+                        }}
+                    >
+                        造数据
+                    </Button>
+                </Row> */}
             </Row>
+            {showRecord.length > 0 &&
             <Row gutter={[16, 16]}>
                 <DeviceData record={showRecord}/>
-            </Row>
-
+            </Row>}
             <Drawer
                 
                 width={600}

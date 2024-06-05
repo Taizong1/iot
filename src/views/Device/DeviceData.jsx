@@ -12,47 +12,6 @@ const BMapGL = window.BMapGL
 const DeviceData = props => {
     // 初始化地图
     var map;
-    
-
-    
-    const initialData = [  
-        {  
-          id: 1,  
-          info: "这是第一条数据的信息",  
-          value: 100,  
-          alert: false,  
-          timestamp: "2024-04-24 12:00:00",  
-          lat: 32.1234,  
-          lng: 120.5678  
-        },  
-        {  
-          id: 2,  
-          info: "这是第二条数据的信息",  
-          value: 75,  
-          alert: true,  
-          timestamp: "2024-04-24 12:05:00",  
-          lat: 30.2345,  
-          lng: 124.6789  
-        },  
-        {  
-            id: 3,  
-            info: "这是第三条数据的信息",  
-            value: 60,  
-            alert: false,  
-            timestamp: "2024-04-24 12:10:00",  
-            lat: 30.3456,  
-            lng: 114.7890  
-          },  
-          {  
-            id: 4,  
-            info: "这是第四条数据的信息",  
-            value: 90,  
-            alert: true,  
-            timestamp: "2024-04-24 12:15:00",  
-            lat: 25.4567,  
-            lng: 120.8901  
-          },  
-      ];  
     const columns = [
         {
             title: "ID",
@@ -84,9 +43,6 @@ const DeviceData = props => {
     // 信息数据
     let [data, setData] = useState([]);
 
-    // loading状态
-    let [load, setLoad] = useState(false);
-
     // 初始化时候请求一次数据
     useEffect(() => {
         const record = props.record;
@@ -94,6 +50,42 @@ const DeviceData = props => {
             pageChange(page, pageSize, record);
         }
         // eslint-disable-next-line
+        let recordData = []
+        record.forEach(item => {
+            recordData.push({
+                id: item.message_id,
+                info: item.info,
+                alert: item.alert == 1 ? true : false,
+                lat: item.latitude,
+                lng: item.longitude,
+                value: item.value,
+                time: new Date(item.timestamp)
+            })
+        })
+
+        
+        const BMapGL = window.BMapGL
+        const pois = recordData.map(item => ({ lng: item.lng, lat: item.lat }));  
+        const map = new BMapGL.Map("container");
+        //可修改初始缩放等级
+        map.centerAndZoom(pois[0], 7);
+        map.enableScrollWheelZoom(true); //鼠标缩放
+        var zoomCtrl = new BMapGL.ZoomControl();  // (地图右下角+ - 缩放按钮) 添加缩放控件
+        map.addControl(zoomCtrl);
+
+        const polyline = new BMapGL.Polyline(pois, {
+            enableEditing: false,
+            enableClicking: true,
+            strokeWeight: 6,
+            strokeOpacity: 0.8,
+            strokeColor: "#f5c104",
+          });
+          map.addOverlay(polyline);
+
+        console.log(recordData)
+        setData(recordData)
+        setTotal(recordData.length)
+
     }, [props.record]);
 
     // 点击下面的分页按钮触发的方法
@@ -111,28 +103,10 @@ const DeviceData = props => {
                 // eslint-disable-next-line
                 code = currentRecords.length === 0 ? null : currentRecords[0].code;
             }
-
-            fetchData();
         },
         // eslint-disable-next-line
         []
     );
-
-    // 获取数据
-    //TODO: 界面初始化加载
-    const fetchData = async () => {
-        // 开始加载
-        setLoad(true);
-
-        let postData = {
-            page: page,
-            pageSize: pageSize,
-            code: code
-        };
-
-        setLoad(false);
-
-    }
 
     const AlertIcon = ({ deviceMessage }) => {  
         if (deviceMessage != null) {  
@@ -145,30 +119,8 @@ const DeviceData = props => {
           return <LoadingOutlined />;  
         }  
       };  
-      
-    useEffect(() => {
-        const BMapGL = window.BMapGL
-        const pois = initialData.map(item => ({ lng: item.lng, lat: item.lat }));  
-        const map = new BMapGL.Map("container");
-        //可修改初始缩放等级
-        map.centerAndZoom(pois[0], 7);
-        map.enableScrollWheelZoom(true); //鼠标缩放
-        var zoomCtrl = new BMapGL.ZoomControl();  // (地图右下角+ - 缩放按钮) 添加缩放控件
-        map.addControl(zoomCtrl);
-
-        const polyline = new BMapGL.Polyline(pois, {
-            enableEditing: false,
-            enableClicking: true,
-            strokeWeight: 6,
-            strokeOpacity: 0.8,
-            strokeColor: "#f5c104",
-          });
-          map.addOverlay(polyline);
-    }, [])
 
     return (
-        
-
         <div>
             <Row gutter={16}>  
 
@@ -185,7 +137,6 @@ const DeviceData = props => {
                         bordered
                         rowKey="id"
                         columns={columns}
-                        loading={load}
                         expandedRowRender={record => (
                             <p style={{margin: 0}}>{record.info}</p>
                         )}

@@ -1,19 +1,25 @@
 import React from "react";
-import * as echarts from "echarts";
 import ReactEcharts from "echarts-for-react";
 
 export default function Bar(props) {
+  const {messageDataCount, timeLabel} = props;
     const option = {
       xAxis: {
         type: 'category',
-        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        data: timeLabel,
       },
       yAxis: {
         type: 'value'
       },
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+      },
       series: [
         {
-          data: [120, 200, 150, 80, 70, 110, 130],
+          data: messageDataCount,
           type: 'bar'
         }
       ]
