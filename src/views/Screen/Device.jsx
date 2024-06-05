@@ -64,20 +64,21 @@ const DeviceInfo = props => {
           let today = new Date().getTime;
           let sevenDay = new Date().getTime - 7 * 24 * 60 * 60 * 1000;
           message = message.filter(item => item.timestamp.getTime() > sevenDay);
-          let Judge = new Array(7).fill(false);
+          let Judge = new Array(7).fill(-1);
           message.forEach(item => {
             let dif = Math.floor((today - item.timestamp.getTime()) / 1000 / 60 / 60 / 24);
             messageCount[6 - dif]++;
-            if(!Judge[dif]){
-              Judge[dif] = true;
-              totalCount[6 - dif]++;
-              if(item.online == 1){
-                onlineCount[6 - dif]++;
-              }else{
-                notOnlineCount[6 - dif]++;
-              }
+            if(Judge[dif] == -1){
+              Judge[dif] = item.online;
             }
           })
+          for(let i = 0; i < 7; i++){
+            if(Judge[i] == -1 && i == 0)continue;
+            if(Judge[i] == -1)Judge[i] = Judge[i - 1];
+            totalCount[i]++;
+            if(Judge[i] == 0)notOnlineCount[i]++;
+            if(Judge[i] == 1)onlineCount[i]++;
+          }
         })
       })
       setDeviceData(devices);
