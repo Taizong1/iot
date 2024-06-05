@@ -34,19 +34,16 @@ export default function Line({totalDevice, onlineTotalDevice, notOnlintotalDevic
       {
         name: '上线设备',
         type: 'line',
-        stack: 'Total',
         data: onlineTotalDevice
       },
       {
         name: '离线设备',
         type: 'line',
-        stack: 'Total',
         data: notOnlintotalDevice
       },
       {
         name: '总设备数',
         type: 'line',
-        stack: 'Total',
         data: totalDevice
       },
     ]

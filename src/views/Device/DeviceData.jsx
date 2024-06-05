@@ -51,6 +51,9 @@ const DeviceData = props => {
         }
         // eslint-disable-next-line
         let recordData = []
+        let change = (time) => {
+            return time.getFullYear() + "-" + (time.getMonth()+1)+"-"+time.getDate()+" "+time.getHours()+":"+time.getMinutes()+":"+time.getSeconds();
+        }
         record.forEach(item => {
             recordData.push({
                 id: item.message_id,
@@ -59,7 +62,7 @@ const DeviceData = props => {
                 lat: item.latitude,
                 lng: item.longitude,
                 value: item.value,
-                time: new Date(item.timestamp)
+                timestamp: change(new Date(item.timestamp))
             })
         })
 
