@@ -105,7 +105,7 @@ const DeviceInfo = props => {
         {title: "名称", dataIndex: "device_name", key: "device_name"},
         {title: "类型", dataIndex: "device_type", key: "device_type"},
         {title: "创建人", dataIndex: "creator", key: "creator"},
-        {title: "创建时间", dataIndex: "create_date", key: "create_date"},
+        {title: "创建时间", dataIndex: "creation_date", key: "creation_date"},
         {title: "最后上线", dataIndex: "last_update_date", key: "last_update_date"},
         {
             title: "操作",
@@ -172,7 +172,7 @@ const DeviceInfo = props => {
             device_type: props.deviceType
         };
 
-        axios.post(server + `api/device_api/getTypeDevice `, postData).then(res => {
+        axios.post(server + `/api/device_api/getTypeDevice `, postData).then(res => {
             setTableData(res.data.devices);
         }).catch(err => {
             message.error("获取" + props.deviceType + "设备失败");
@@ -183,7 +183,7 @@ const DeviceInfo = props => {
                   device_type: "智能物联网设备",
                   creator: "John Doe",  
                   online: 1,
-                  create_date: "2023-01-15",  
+                  creation_date: "2023-01-15",  
                   last_update_date: "2024-04-10",
                   description: "asd"
                 },  
@@ -193,7 +193,7 @@ const DeviceInfo = props => {
                   creator: "John Doe",  
                   device_type: "智能穿戴设备",
                   online: 1,
-                  create_date: "2023-01-15",  
+                  creation_date: "2023-01-15",  
                   last_update_date: "2024-04-10" ,
                   description: "asd"
                 },  
@@ -213,7 +213,7 @@ const DeviceInfo = props => {
             device_name: e.device_name,
             device_type: typeMapping[e.device_type]
         };
-        axios.post(server + `api/device_api/getDefinedDevice  `, postData).then(res => {
+        axios.post(server + `/api/device_api/getDefinedDevice  `, postData).then(res => {
             setTableData(res.data.devices);
         }).catch(err => {
             message.error("获取指定设备失败");
@@ -224,7 +224,7 @@ const DeviceInfo = props => {
                   device_type: "智能物联网设备",
                   creator: "John Doe",  
                   online: 1,
-                  create_date: "2023-01-15",  
+                  creation_date: "2023-01-15",  
                   last_update_date: "2024-04-10",
                   description: "asd"
                 },  
@@ -234,7 +234,7 @@ const DeviceInfo = props => {
                   creator: "John Doe",  
                   device_type: "智能穿戴设备",
                   online: 1,
-                  create_date: "2023-01-15",  
+                  creation_date: "2023-01-15",  
                   last_update_date: "2024-04-10" ,
                   description: "asd"
                 },  
@@ -250,23 +250,25 @@ const DeviceInfo = props => {
                 device_id: editRecord.device_id,
                 device_name: e.device_name,
                 device_type: e.device_type,
-                online: e.online,
+                online: e.online == "离线" ? 0 : 1,
                 description: e.description
             };
-            axios.post(server + `api/device_api/modifyDevice`, postData).then(res => {
+            axios.post(server + `/api/device_api/modifyDevice`, postData).then(res => {
                 let newTableData = tableData;
                 let index = tableData.findIndex(item => item.device_id === editRecord.device_id);
                 newTableData[index] = {
                   device_id: editRecord.device_id,
                   device_name: e.device_name,
                   device_type: e.device_type,
-                  online: e.online,
+                  online: e.online == "离线" ? 0 : 1,
                   creator: editRecord.creator,
-                  create_date: editRecord.creator, 
-                  last_update_date: new Date().now(),
+                  creation_date: editRecord.creator, 
+                  last_update_date: new Date().getTime(),
                   description: e.description
                 }
                 setTableData(newTableData);
+                setOpen(false);
+                message.success("编辑指定设备成功");
             }).catch(err => {
                 message.error("编辑指定设备失败");
             });
@@ -275,25 +277,30 @@ const DeviceInfo = props => {
                 device_name: e.device_name,
                 device_type: e.device_type,
                 creator: e.creator,
-                online: e.online,
+                online: e.online == "离线" ? 0 : 1,
+                creation_date: new Date().getTime(),
                 description: e.description
             };
-            axios.post(server + `api/device_api/createDevice`, postData).then(res => {
+            console.log(postData)
+            axios.post(server + `/api/device_api/createDevice`, postData).then(res => {
                 if(e.device_type === props.deviceType){
                     let newTableData = tableData;
                     newTableData.push({
                         device_id: res.data.device_id,
                         device_name: e.device_name,
                         device_type: e.device_type,
-                        online: e.online,
+                        online: e.online == "离线" ? 0 : 1,
                         creator: editRecord.creator,
-                        create_date: new Date().now(), 
-                        last_update_date: new Date().now(),
+                        creation_date: postData.creation_date,
+                        last_update_date: postData.creation_date,
                         description: e.description
                     })
                     setTableData(newTableData);
                 }
+                setOpen(false);
+                message.success("创建指定设备成功");
             }).catch(err => {
+                console.log(err)
                 message.error("创建指定设备失败");
             });
         }
