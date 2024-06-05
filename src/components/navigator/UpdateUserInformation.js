@@ -131,9 +131,6 @@ function UpdateUserInformation() {
                                            <MDBCol col='6' style={{ textAlign: 'left' }}>
                                                <img src= {user_avator} className='rounded-circle shadow-5-strong' alt='' height='140' />
                                            </MDBCol>
-                                           <MDBCol col='6'>
-                                               <MDBFile label='点击上传文件（.png/.jpg/.jpeg）' id='customFile' onChange={handleAvatarChange}/>
-                                           </MDBCol>
                                        </MDBRow>
                                        <MDBInput wrapperClass='mb-4' label='用户名' id='form3' type='text' value={userName} disabled />
                                        <MDBRow>
