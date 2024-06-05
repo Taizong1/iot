@@ -196,37 +196,14 @@ const DeviceInfo = props => {
     // 点击搜索按钮触发的方法
     const searchData = e => {
         let postData = {
-            device_id: e.device_id,
-            device_name: e.device_name,
-            device_type: typeMapping[e.device_type]
+            device_id: e.device_id || null,
+            device_name: e.device_name || null,
+            device_type: TypeMapping[e.device_type] || null
         };
         axios.post(server + `/api/device_api/getDefinedDevice  `, postData).then(res => {
             setTableData(res.data.devices);
         }).catch(err => {
             message.error("获取指定设备失败");
-            setTableData( [  
-                {  
-                  device_id: "001",  
-                  device_name: "Product A",  
-                  device_type: "智能物联网设备",
-                  creator: "John Doe",  
-                  online: 1,
-                  creation_date: "2023-01-15",  
-                  last_update_date: "2024-04-10",
-                  description: "asd"
-                },  
-                {  
-                  device_id: "002",  
-                  device_name: "Product B",  
-                  creator: "John Doe",  
-                  device_type: "智能穿戴设备",
-                  online: 1,
-                  creation_date: "2023-01-15",  
-                  last_update_date: "2024-04-10" ,
-                  description: "asd"
-                },  
-                // 可以继续添加更多数据项  
-              ])
         });
     };
 
