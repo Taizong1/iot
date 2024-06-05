@@ -104,7 +104,14 @@ const DeviceInfo = props => {
         5: "智能互联网设备",
         6: "智能无线设备",
         7: "其他",
-        "其他": "其他",
+        智能物联网设备: "智能物联网设备",
+        智能穿戴设备: "智能穿戴设备",
+        智能家居设备: "智能家居设备",
+        智能物流设备: "智能物流设备",
+        智能飞行器设备: "智能飞行器设备",
+        智能互联网设备: "智能互联网设备",
+        智能无线设备: "智能无线设备",
+        其他: "其他",
       };
     
     const onlineMapping = {
@@ -225,8 +232,10 @@ const DeviceInfo = props => {
                 device_name: e.device_name,
                 device_type: e.device_type,
                 online: e.online == "离线" ? 0 : 1,
+                last_update_date: new Date(new Date().getTime()).toISOString().slice(0, 19).replace('T', ' '),
                 description: e.description
             };
+            console.log(postData)
             axios.post(deviceServer + `/api/device_api/modifyDevice`, postData).then(res => {
                 let newTableData = tableData;
                 let index = tableData.findIndex(item => item.device_id === editRecord.device_id);
@@ -236,14 +245,15 @@ const DeviceInfo = props => {
                   device_type: e.device_type,
                   online: e.online == "离线" ? 0 : 1,
                   creator: editRecord.creator,
-                  creation_date: editRecord.creator, 
-                  last_update_date: new Date(new Date().getTime()).toISOString().slice(0, 19).replace('T', ' '),
+                  creation_date: editRecord.creation_date, 
+                  last_update_date: postData.last_update_date,
                   description: e.description
                 }
                 setTableData(newTableData);
                 setOpen(false);
                 message.success("编辑指定设备成功");
             }).catch(err => {
+                console.log(err)
                 message.error("编辑指定设备失败");
             });
         }else{//创建

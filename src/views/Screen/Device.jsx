@@ -18,14 +18,14 @@ const messageServer = "http://10.214.241.121:8082";
 
 const DeviceInfo = props => {
   
-  const deviceType = props;
+  const {deviceType} = props;
   const [deviceData, setDeviceData] = useState([]);
   const [messageData, setMessageData] = useState([]);
-  const [messageDataCount, setMessageDataCount] = useState([0, 0, 0, 0, 0, 0, 0]);
+  const [messageDataCount, setMessageDataCount] = useState(new Array(7).fill(0));
   const [totalDeviceCountNow, setTotalDeviceCountNow] = useState(0);
-  const [totalDevice, setTotalDevice] = useState([0, 0, 0, 0, 0, 0, 0]);
-  const [onlineTotalDevice, setOnlineTotalDevice] = useState([0, 0, 0, 0, 0, 0, 0]);
-  const [notOnlintotalDevice, setNotOnlineTotalDevice] = useState([0, 0, 0, 0, 0, 0, 0]);
+  const [totalDevice, setTotalDevice] = useState(new Array(7).fill(0));
+  const [onlineTotalDevice, setOnlineTotalDevice] = useState(new Array(7).fill(0));
+  const [notOnlintotalDevice, setNotOnlineTotalDevice] = useState(new Array(7).fill(0));
   const [timeLabel, setTimeLabel] = useState(["", "", "", "", "", "", ""]);
   
   useEffect(() => {
@@ -40,18 +40,24 @@ const DeviceInfo = props => {
   }, [new Date().getDay()])
 
   useEffect(() => {
-    axios.post(deviceServer + "/api/device_api/getTypeDevice", {device_type: deviceType}).then(res => {
-      let messageGetData = [];
-      let messageCount = [0, 0, 0, 0, 0, 0, 0];
-      let totalCount = [0, 0, 0, 0, 0, 0, 0];
-      let onlineCount = [0, 0, 0, 0, 0, 0, 0];
-      let notOnlineCount = [0, 0, 0, 0, 0, 0, 0];
+    console.log(deviceType)
+    const postData={
+      device_type: deviceType
+    }
+    axios.post(deviceServer + "/api/device_api/getTypeDevice", postData).then(res => {
+      let devices = res.data.devices;
+      let messageGetData = new Array(devices.length).fill([]);
+      let messageCount = new Array(7).fill(0);
+      let totalCount = new Array(7).fill(0);
+      let onlineCount = new Array(7).fill(0);
+      let notOnlineCount = new Array(7).fill(0);
 
-      res.data.forEach(item => {
+      devices.forEach(item => {
         if(item.online == 1)onlineCount++;
         axios.post(messageServer + "/api/iotmessage_api/getMessage", {device_id: item.device_id}).then(message => {
-          message=message.data;
+          message=message.data.messages;
           messageGetData.push(message);
+          console.log(messageGetData)
           message.sort((m1, m2)=>{
             return m1.timestamp.getTime() - m2.timestamp.getTime();
           })
@@ -74,15 +80,15 @@ const DeviceInfo = props => {
           })
         })
       })
-      setDeviceData(res.data);
+      setDeviceData(devices);
       setMessageData(messageGetData);
       setMessageDataCount(messageCount);
       setTotalDevice(totalCount);
       setOnlineTotalDevice(onlineCount);
       setNotOnlineTotalDevice(notOnlineCount);
-      setTotalDeviceCountNow(res.data.length);
+      setTotalDeviceCountNow(devices.length);
     })
-  }, deviceType)
+  }, [props])
 
   return (
     <Layout className="index animated fadeIn">

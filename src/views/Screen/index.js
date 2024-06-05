@@ -39,7 +39,7 @@ const Device = () => {
           }}
         >
           <Breadcrumb.Item>首页</Breadcrumb.Item>
-          <Breadcrumb.Item>设备中心</Breadcrumb.Item>
+          <Breadcrumb.Item>数据大屏</Breadcrumb.Item>
         </Breadcrumb>
         <Layout
           style={{
@@ -70,7 +70,7 @@ const Device = () => {
               minHeight: 400,
             }}
           >
-            <DeviceInfo deviceType = {deviceType}/>
+            <DeviceInfo {...{deviceType}}/>
           </Content>
         </Layout>
       </Content>

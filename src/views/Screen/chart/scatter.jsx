@@ -18,7 +18,7 @@ export default function Scatter({ deviceData, messageData }) {
 		//特别注意格式是name:"名称"，value前两个值是坐标，最后一个值是mqtt值，mqtt越大散点越大。
 		let res = []
 		deviceData.forEach((item, index) => {
-			const message = messageData.get(index);
+			const message = messageData[index];
 			res.push({
 				name: item.device_name,
 				value: [message.latitude, message.longitude, message.value]
