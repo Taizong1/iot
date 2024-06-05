@@ -111,7 +111,7 @@ const DeviceInfo = props => {
             <div className="headFont">MQTT数据总流量柱状图</div>
             </div>
             <Divider />
-            <Bar />
+            <Bar {...{messageDataCount, timeLabel}}/>
           </div>
         </Col>
       </Row>
