@@ -22,8 +22,9 @@ export default function Scatter({ deviceData, messageData }) {
 			if(message.length > 0){
 				res.push({
 					name: item.device_name,
-					value: [message[0].latitude, message[0].longitude, message[0].value]
+					value: [message[0].longitude, message[0].latitude, message[0].value]
 				})
+				console.log(res)
 			}
 		})
 
@@ -143,7 +144,7 @@ export default function Scatter({ deviceData, messageData }) {
 					coordinateSystem: 'bmap',
 					data: res,
 					symbolSize: function (val) {
-						return val[2] /10;
+						return val[2] / 5;
 					},
 					encode: {
 						value: 2
