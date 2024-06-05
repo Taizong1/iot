@@ -65,20 +65,21 @@ const DeviceInfo = props => {
     const handleDelete = deleteid => {
         const confirmed = window.confirm("确定要删除吗？");
         if (confirmed) {
-            // 获取修改结果
             let postData = {
                 device_id: deleteid
             };
-            axios.post(server + `api/device_api/deleteDevice`, postData).then(res => {
+            console.log(deleteid)
+            console.log(postData)
+            axios.post(server + `/api/device_api/deleteDevice`, postData).then(res => {
                 if (res.data.signal === "success") {
                     message.info("删除设备成功");
-                    let newTableData = tableData.filter((item, index )=> index !== deleteid);
+                    let newTableData = tableData.filter((item, index )=> item.device_id != deleteid);
                     setTableData(newTableData);
-                    props.history.go(-1);
                 } else {
                     message.error("删除设备失败，" + res.data.message);
                 }
             }).catch(err => {
+                console.log(err)
                 message.error("删除设备失败");
             });
         }
@@ -135,7 +136,7 @@ const DeviceInfo = props => {
                     >
                         编辑
                     </Button>
-                    <Button onClick={() => handleDelete(record.id)}>
+                    <Button onClick={() => handleDelete(record.device_id)}>
                     删除
                     </Button>
 
