@@ -33,61 +33,63 @@ const DeviceInfo = props => {
     let oneDay = 24 * 60 * 60 * 1000;
     let dayList = [];
     for(let i = 0; i < 7; i++){
-      dayList.push(day.getMonth() + "月" + day.getDate() + "日");
+      dayList.push((day.getMonth()+1) + "月" + day.getDate() + "日");
       day.setTime(day.getTime() - oneDay);
     }
     setTimeLabel(dayList.reverse());
   }, [new Date().getDay()])
 
   useEffect(() => {
-    console.log(deviceType)
     const postData={
       device_type: deviceType
     }
     axios.post(deviceServer + "/api/device_api/getTypeDevice", postData).then(res => {
       let devices = res.data.devices;
-      let messageGetData = new Array(devices.length).fill([]);
+      let messageGetData = [];
       let messageCount = new Array(7).fill(0);
       let totalCount = new Array(7).fill(0);
       let onlineCount = new Array(7).fill(0);
       let notOnlineCount = new Array(7).fill(0);
 
-      devices.forEach(item => {
-        if(item.online == 1)onlineCount++;
-        axios.post(messageServer + "/api/iotmessage_api/getMessage", {device_id: item.device_id}).then(message => {
-          message=message.data.messages;
-          messageGetData.push(message);
-          console.log(messageGetData)
-          message.sort((m1, m2)=>{
-            return m1.timestamp.getTime() - m2.timestamp.getTime();
-          })
-          let today = new Date().getTime;
-          let sevenDay = new Date().getTime - 7 * 24 * 60 * 60 * 1000;
-          message = message.filter(item => item.timestamp.getTime() > sevenDay);
-          let Judge = new Array(7).fill(-1);
-          message.forEach(item => {
-            let dif = Math.floor((today - item.timestamp.getTime()) / 1000 / 60 / 60 / 24);
-            messageCount[6 - dif]++;
-            if(Judge[dif] == -1){
-              Judge[dif] = item.online;
+      let request = devices.map(item => axios.post(messageServer + "/api/iotmessage_api/getMessage", {device_id: item.device_id}))
+      Promise.all(request)
+        .then(response => {
+          for(let i = 0;i < response.length; i++){
+            let message = response[i].data.messages;
+            message.sort((m1, m2)=>{
+              return new Date(m2.timestamp).getTime() - new Date(m1.timestamp).getTime();
+            })
+            messageGetData.push(message);
+            console.log(message)
+            let today = new Date().getTime();
+            let sevenDay = new Date().getTime() - 7 * 24 * 60 * 60 * 1000;
+            message = message.filter(item => new Date(item.timestamp).getTime() > sevenDay);
+            
+            let Judge = new Array(7).fill(-1);
+            message.forEach(item => {
+              let dif = Math.floor((today - new Date(item.timestamp).getTime()) / 1000 / 60 / 60 / 24);
+              console.log(dif)
+              messageCount[6 - dif]++;
+              if(Judge[dif] == -1){
+                Judge[dif] = item.alert;
+              }
+            })
+            for(let i = 0; i < 7; i++){
+              if(Judge[i] == -1 && i == 0)continue;
+              if(Judge[i] == -1)Judge[i] = Judge[i - 1];
+              totalCount[i]++;
+              if(Judge[i] == 0)notOnlineCount[i]++;
+              if(Judge[i] == 1)onlineCount[i]++;
             }
-          })
-          for(let i = 0; i < 7; i++){
-            if(Judge[i] == -1 && i == 0)continue;
-            if(Judge[i] == -1)Judge[i] = Judge[i - 1];
-            totalCount[i]++;
-            if(Judge[i] == 0)notOnlineCount[i]++;
-            if(Judge[i] == 1)onlineCount[i]++;
           }
+          setDeviceData(devices);
+          setMessageData(messageGetData);
+          setMessageDataCount(messageCount);
+          setTotalDevice(totalCount);
+          setOnlineTotalDevice(onlineCount);
+          setNotOnlineTotalDevice(notOnlineCount);
+          setTotalDeviceCountNow(devices.length);
         })
-      })
-      setDeviceData(devices);
-      setMessageData(messageGetData);
-      setMessageDataCount(messageCount);
-      setTotalDevice(totalCount);
-      setOnlineTotalDevice(onlineCount);
-      setNotOnlineTotalDevice(notOnlineCount);
-      setTotalDeviceCountNow(devices.length);
     })
   }, [props])
 

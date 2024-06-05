@@ -19,10 +19,12 @@ export default function Scatter({ deviceData, messageData }) {
 		let res = []
 		deviceData.forEach((item, index) => {
 			const message = messageData[index];
-			res.push({
-				name: item.device_name,
-				value: [message.latitude, message.longitude, message.value]
-			})
+			if(message.length > 0){
+				res.push({
+					name: item.device_name,
+					value: [message[0].latitude, message[0].longitude, message[0].value]
+				})
+			}
 		})
 
 		option = {
@@ -141,7 +143,7 @@ export default function Scatter({ deviceData, messageData }) {
 					coordinateSystem: 'bmap',
 					data: res,
 					symbolSize: function (val) {
-						return val[2] / 10;
+						return val[2] /10;
 					},
 					encode: {
 						value: 2

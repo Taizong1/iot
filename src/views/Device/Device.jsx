@@ -195,7 +195,7 @@ const DeviceInfo = props => {
             let data=res.data.devices;
             data.map(item => {
                 let change = (time) => {
-                    return time.getFullYear() + "-" + time.getMonth()+"-"+time.getDate()+" "+time.getHours()+":"+time.getMinutes()+":"+time.getSeconds();
+                    return time.getFullYear() + "-" + (time.getMonth()+1)+"-"+time.getDate()+" "+time.getHours()+":"+time.getMinutes()+":"+time.getSeconds();
                 }
                 item.creation_date = change(new Date(item.creation_date))
                 item.last_update_date = change(new Date(item.last_update_date))
@@ -298,24 +298,7 @@ const DeviceInfo = props => {
     const handleMapRecord = record => {
         axios.post(messageServer + "/api/iotmessage_api/getMessage", {device_id: record.device_id}).then(res => {
             console.log(res.data)
-            setShowRecord(res.data);
-            // setShowRecord([{
-            //     'message_id': 1,
-            //     'timestamp': 123123123,
-            //     'alert': 1,
-            //     'info': 'asd',
-            //     'latitude': 30,
-            //     'longitude': 120,
-            //     'value': 100,
-            // },{
-            //     'message_id': 2,
-            //     'timestamp': 1213123123,
-            //     'alert': 1,
-            //     'info': 'asd',
-            //     'latitude': 31,
-            //     'longitude': 122,
-            //     'value': 200,
-            // }]);
+            setShowRecord(res.data.messages);
         }).catch(err => {
             console.log(err);
         })
