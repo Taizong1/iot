@@ -201,7 +201,7 @@ const DeviceInfo = props => {
                 item.last_update_date = change(new Date(item.last_update_date))
             })
             setTableData(res.data.devices);
-            console.log(res.data.devices);
+            setTotal(res.data.devices.length)
         }).catch(err => {
             message.error("获取" + props.deviceType + "设备失败");
         });
@@ -244,7 +244,7 @@ const DeviceInfo = props => {
                   device_name: e.device_name,
                   device_type: e.device_type,
                   online: e.online == "离线" ? 0 : 1,
-                  creator: editRecord.creator,
+                  creator: e.creator,
                   creation_date: editRecord.creation_date, 
                   last_update_date: postData.last_update_date,
                   description: e.description
