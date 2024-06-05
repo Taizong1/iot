@@ -6,6 +6,7 @@ import {Routes, Route, Navigate,useNavigate, Outlet} from "react-router-dom";
 import { UserOutlined,LogoutOutlined } from '@ant-design/icons';
 import routes from "../routes/index.js";
 import { Link } from 'react-router-dom'; 
+import { store } from '../components/reducer/store.js';
 const { Header, Content, Footer } = Layout;
 
 
@@ -51,7 +52,7 @@ const DefaultLayout = () => {
           </Menu.Item>  
         </Menu>  
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>      
-            <span style={{ color: 'white', marginRight: '10px' }}>Username</span> 
+            <span style={{ color: 'white', marginRight: '10px' }}>{store.getState().userName}</span> 
             <Avatar size={60} icon={<UserOutlined />} />
         </div>  
       </Header>

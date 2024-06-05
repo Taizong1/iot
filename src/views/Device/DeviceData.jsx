@@ -66,12 +66,14 @@ const DeviceData = props => {
             })
         })
 
-        
+        recordData.sort((m1, m2) => {
+            return new Date(m2.timestamp).getTime() - new Date(m1.timestamp).getTime();
+        })
         const BMapGL = window.BMapGL
-        const pois = recordData.map(item => ({ lng: item.lng, lat: item.lat }));  
+        const pois = recordData.map(item => ({ lng: item.lng, lat: item.lat })).slice(0, Math.min(5, recordData.length));
         const map = new BMapGL.Map("container");
         //可修改初始缩放等级
-        map.centerAndZoom(pois[0], 7);
+        map.centerAndZoom(pois[0], 10);
         map.enableScrollWheelZoom(true); //鼠标缩放
         var zoomCtrl = new BMapGL.ZoomControl();  // (地图右下角+ - 缩放按钮) 添加缩放控件
         map.addControl(zoomCtrl);
@@ -81,7 +83,7 @@ const DeviceData = props => {
             enableClicking: true,
             strokeWeight: 6,
             strokeOpacity: 0.8,
-            strokeColor: "#f5c104",
+            strokeColor: "red",
           });
           map.addOverlay(polyline);
 

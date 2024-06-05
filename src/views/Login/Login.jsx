@@ -51,7 +51,7 @@ const Login = () => {
             .then((response)=>{
                 if (response) {
                     dispatch(updateUserInfo(response.data.user.email, response.data.user.phone))
-                    navigate('/reference');
+                    navigate('/index');
                 }
             })
         } catch (errorInfo) {  
