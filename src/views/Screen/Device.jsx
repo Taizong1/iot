@@ -124,7 +124,7 @@ const DeviceInfo = props => {
               </div>
               <Divider />
           
-          <Scatter/>
+              <Scatter {...{deviceData, messageData}}/>
           </div>
         </Col>
 
