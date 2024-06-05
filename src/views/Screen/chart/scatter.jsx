@@ -35,7 +35,7 @@ export default function Scatter({ deviceData, messageData }) {
 			},
 			bmap: {
 				center: [120.1603, 30.2717],
-				zoom: 8,
+				zoom: 9,
 				roam: true,
 				mapStyle: {
 					styleJson: [{

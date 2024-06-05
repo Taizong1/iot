@@ -9,6 +9,7 @@ import "../style/layout.css"
 import AppHeader from "./AppHeader.jsx";
 import AppAside from "./AppAside.jsx";
 import AppFooter from "./AppFooter.jsx";
+import { store } from '../reducer/store';
 
 const { Content } = Layout;
 
@@ -82,7 +83,7 @@ const DefaultLayout = (props) => {
           menuToggle={state.menuToggle}
           menuClick={menuClick}
           loginOut={loginOut}
-          username={"Username"}
+          username={store.getState().userName}
         />
         <Content className="content">  
           <Routes>  

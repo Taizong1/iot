@@ -38,7 +38,6 @@ const Device = () => {
             margin: '16px 0',
           }}
         >
-          <Breadcrumb.Item>首页</Breadcrumb.Item>
           <Breadcrumb.Item>设备中心</Breadcrumb.Item>
         </Breadcrumb>
         <Layout

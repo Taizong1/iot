@@ -5,7 +5,6 @@ const Index = () => {
   return (  
     <div>  
       <Breadcrumb style={{ margin: '16px 0' }}>
-          <Breadcrumb.Item>首页</Breadcrumb.Item>
           <Breadcrumb.Item>用户中心</Breadcrumb.Item>
         </Breadcrumb>
         <div
