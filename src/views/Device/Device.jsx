@@ -26,7 +26,8 @@ import { useForm } from "antd/es/form/Form";
 import {store} from '../../components/reducer/store';
 
 
-const server = "http://10.214.241.121:8081";
+const deviceServer = "http://10.214.241.121:8081";
+const messageServer = "http://10.214.241.121:8082";
 
 const {Panel} = Collapse;
 const {Option} = Select;
@@ -68,9 +69,7 @@ const DeviceInfo = props => {
             let postData = {
                 device_id: deleteid
             };
-            console.log(deleteid)
-            console.log(postData)
-            axios.post(server + `/api/device_api/deleteDevice`, postData).then(res => {
+            axios.post(deviceServer + `/api/device_api/deleteDevice`, postData).then(res => {
                 if (res.data.signal === "success") {
                     message.info("删除设备成功");
                     let newTableData = tableData.filter((item, index )=> item.device_id != deleteid);
@@ -185,8 +184,17 @@ const DeviceInfo = props => {
             device_type: props.deviceType
         };
 
-        axios.post(server + `/api/device_api/getTypeDevice `, postData).then(res => {
+        axios.post(deviceServer + `/api/device_api/getTypeDevice `, postData).then(res => {
+            let data=res.data.devices;
+            data.map(item => {
+                let change = (time) => {
+                    return time.getFullYear() + "-" + time.getMonth()+"-"+time.getDate()+" "+time.getHours()+":"+time.getMinutes()+":"+time.getSeconds();
+                }
+                item.creation_date = change(new Date(item.creation_date))
+                item.last_update_date = change(new Date(item.last_update_date))
+            })
             setTableData(res.data.devices);
+            console.log(res.data.devices);
         }).catch(err => {
             message.error("获取" + props.deviceType + "设备失败");
         });
@@ -201,7 +209,7 @@ const DeviceInfo = props => {
             device_name: e.device_name || null,
             device_type: TypeMapping[e.device_type] || null
         };
-        axios.post(server + `/api/device_api/getDefinedDevice  `, postData).then(res => {
+        axios.post(deviceServer + `/api/device_api/getDefinedDevice  `, postData).then(res => {
             setTableData(res.data.devices);
         }).catch(err => {
             message.error("获取指定设备失败");
@@ -219,7 +227,7 @@ const DeviceInfo = props => {
                 online: e.online == "离线" ? 0 : 1,
                 description: e.description
             };
-            axios.post(server + `/api/device_api/modifyDevice`, postData).then(res => {
+            axios.post(deviceServer + `/api/device_api/modifyDevice`, postData).then(res => {
                 let newTableData = tableData;
                 let index = tableData.findIndex(item => item.device_id === editRecord.device_id);
                 newTableData[index] = {
@@ -248,7 +256,7 @@ const DeviceInfo = props => {
                 description: e.description
             };
             console.log(postData)
-            axios.post(server + `/api/device_api/createDevice`, postData).then(res => {
+            axios.post(deviceServer + `/api/device_api/createDevice`, postData).then(res => {
                 console.log(res);
                 if(e.device_type === props.deviceType){
                     let newTableData = tableData;
@@ -276,6 +284,32 @@ const DeviceInfo = props => {
     const formReset = () => {
         form.resetFields();
     };
+
+    const handleMapRecord = record => {
+        axios.post(messageServer + "/api/iotmessage_api/getMessage", {device_id: record.device_id}).then(res => {
+            console.log(res.data)
+            setShowRecord(res.data);
+            // setShowRecord([{
+            //     'message_id': 1,
+            //     'timestamp': 123123123,
+            //     'alert': 1,
+            //     'info': 'asd',
+            //     'latitude': 30,
+            //     'longitude': 120,
+            //     'value': 100,
+            // },{
+            //     'message_id': 2,
+            //     'timestamp': 1213123123,
+            //     'alert': 1,
+            //     'info': 'asd',
+            //     'latitude': 31,
+            //     'longitude': 122,
+            //     'value': 200,
+            // }]);
+        }).catch(err => {
+            console.log(err);
+        })
+    }
 
     return (
         <Layout>
@@ -339,7 +373,7 @@ const DeviceInfo = props => {
                         rowSelection={{
                             // row selection
                             onChange: (selectedRowKeys, selectedRows) => {
-                                setShowRecord(selectedRows);
+                                handleMapRecord(selectedRows[0]);
                             },
                             type: "radio",
                             getCheckboxProps: record => ({
@@ -372,10 +406,10 @@ const DeviceInfo = props => {
                     </Button>
                 </Row>
             </Row>
+            {showRecord.length > 0 &&
             <Row gutter={[16, 16]}>
                 <DeviceData record={showRecord}/>
-            </Row>
-
+            </Row>}
             <Drawer
                 
                 width={600}
