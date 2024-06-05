@@ -263,7 +263,7 @@ const DeviceInfo = props => {
                   online: e.online == "离线" ? 0 : 1,
                   creator: editRecord.creator,
                   creation_date: editRecord.creator, 
-                  last_update_date: new Date().getTime(),
+                  last_update_date: new Date(new Date().getTime()).toISOString().slice(0, 19).replace('T', ' '),
                   description: e.description
                 }
                 setTableData(newTableData);
@@ -278,11 +278,12 @@ const DeviceInfo = props => {
                 device_type: e.device_type,
                 creator: e.creator,
                 online: e.online == "离线" ? 0 : 1,
-                creation_date: new Date().getTime(),
+                creation_date: new Date(new Date().getTime()).toISOString().slice(0, 19).replace('T', ' '),
                 description: e.description
             };
             console.log(postData)
             axios.post(server + `/api/device_api/createDevice`, postData).then(res => {
+                console.log(res);
                 if(e.device_type === props.deviceType){
                     let newTableData = tableData;
                     newTableData.push({
